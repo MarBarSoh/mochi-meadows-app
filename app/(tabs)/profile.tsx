@@ -3,12 +3,92 @@ import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Animated, Easing 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
+import { PLAYER } from '@/constants/playerState';
 import MochiCharacter, { AccessoryId } from '@/components/MochiCharacter';
 
-const PLAYER_LEVEL = 4;
-const PLAYER_XP = 2600;
-const NEXT_LEVEL_XP = 3500;
-const CURRENT_LEVEL_XP = 2200;
+type BgTheme = {
+  id: string;
+  name: string;
+  emoji: string;
+  sky: string;
+  mid: string;
+  xpRow: string;
+  grass: string;
+  border: string;
+  grassEmoji: string;
+  unlocked: boolean;
+  claimable?: boolean;
+  unlockLevel: number;
+};
+
+const BACKGROUNDS: BgTheme[] = [
+  {
+    id: 'sunny',
+    name: 'Sunny\nMeadow',
+    emoji: '☀️',
+    sky: '#6DBFE0',
+    mid: '#8ACA5C',
+    xpRow: '#79BC4C',
+    grass: '#5BAD3F',
+    border: '#A8D8EA',
+    grassEmoji: '🌿 🌸 🌺 🌿 🌸 🌺 🌿',
+    unlocked: true,
+    unlockLevel: 1,
+  },
+  {
+    id: 'cherry',
+    name: 'Cherry\nGarden',
+    emoji: '🌸',
+    sky: '#FFCCD8',
+    mid: '#F09BB0',
+    xpRow: '#E07090',
+    grass: '#C84A70',
+    border: '#FFB7C5',
+    grassEmoji: '🌸 🌸 🌸 🌸 🌸 🌸 🌸',
+    unlocked: true,
+    unlockLevel: 2,
+  },
+  {
+    id: 'beach',
+    name: 'Sunset\nBeach',
+    emoji: '🌊',
+    sky: '#5B9FCC',
+    mid: '#3A8AAF',
+    xpRow: '#2A749A',
+    grass: '#1A5A85',
+    border: '#7AB5D5',
+    grassEmoji: '🌊 🐚 🌊 🐚 🌊 🐚 🌊',
+    unlocked: true,
+    unlockLevel: 3,
+  },
+  {
+    id: 'night',
+    name: 'City\nNight',
+    emoji: '🌃',
+    sky: '#1A1040',
+    mid: '#2A1A5A',
+    xpRow: '#3A2A70',
+    grass: '#4A3A80',
+    border: '#6A5AAA',
+    grassEmoji: '✨ 🌟 ✨ 🌟 ✨ 🌟 ✨',
+    unlocked: false,
+    claimable: true,
+    unlockLevel: 4,
+  },
+  {
+    id: 'autumn',
+    name: 'Golden\nGarden',
+    emoji: '🍂',
+    sky: '#E8982A',
+    mid: '#D07018',
+    xpRow: '#B85808',
+    grass: '#924000',
+    border: '#F0B040',
+    grassEmoji: '🍂 🍁 🌻 🍂 🍁 🌻 🍂',
+    unlocked: false,
+    unlockLevel: 5,
+  },
+];
 
 type Accessory = {
   id: AccessoryId;
@@ -39,10 +119,10 @@ const BIOMES = [
 ];
 
 const STATS = [
-  { label: 'Activities\nStarted', value: '2',    emoji: '🗺️' },
-  { label: 'Stalls\nVisited',     value: '1',    emoji: '🍜' },
-  { label: 'Accessories\nOwned',  value: '4',    emoji: '🎀' },
-  { label: 'Meadow\nLevel',       value: 'LV 4', emoji: '🌸' },
+  { label: 'Activities\nStarted', value: String(PLAYER.activitiesStarted), emoji: '🗺️' },
+  { label: 'Stalls\nVisited',     value: String(PLAYER.stallsDone),        emoji: '🍜' },
+  { label: 'Accessories\nOwned',  value: String(PLAYER.accessoriesOwned),  emoji: '🎀' },
+  { label: 'Meadow\nLevel',       value: `LV ${PLAYER.level}`,             emoji: '🌸' },
 ];
 
 function AccSlot({ acc, isEquipped, onPress }: {
@@ -87,20 +167,16 @@ function AccSlot({ acc, isEquipped, onPress }: {
         onPressOut={isInteractive ? pressOut : undefined}
         onPress={onPress}
       >
-        {/* Level badge for locked items */}
         {!isInteractive && (
           <View style={styles.levelLockBadge}>
             <Text style={styles.levelLockText}>LV {acc.unlockLevel}</Text>
           </View>
         )}
-
-        {/* Claim icon for claimable items */}
         {acc.claimable && (
           <View style={styles.claimBadge}>
             <Text style={styles.claimBadgeIcon}>🎁</Text>
           </View>
         )}
-
         <Text style={[styles.accEmoji, !isInteractive && styles.accEmojiLocked]}>{acc.emoji}</Text>
         <Text style={[
           styles.accName,
@@ -110,7 +186,6 @@ function AccSlot({ acc, isEquipped, onPress }: {
         ]}>
           {acc.name}
         </Text>
-
         {isEquipped && (
           <View style={styles.equippedBadge}>
             <Text style={styles.equippedBadgeText}>ON</Text>
@@ -127,10 +202,60 @@ function AccSlot({ acc, isEquipped, onPress }: {
   );
 }
 
+function BgSlot({ bg, isSelected, onPress }: {
+  bg: BgTheme;
+  isSelected: boolean;
+  onPress: () => void;
+}) {
+  const scale = useRef(new Animated.Value(1)).current;
+  const isInteractive = bg.unlocked || bg.claimable;
+
+  const pressIn = () =>
+    Animated.spring(scale, { toValue: 0.88, useNativeDriver: true, speed: 40, bounciness: 0 }).start();
+  const pressOut = () =>
+    Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 18, bounciness: 16 }).start();
+
+  return (
+    <Animated.View style={{ transform: [{ scale }], flex: 1 }}>
+      <TouchableOpacity
+        style={[
+          styles.bgSlot,
+          isSelected && styles.bgSlotSelected,
+          !isInteractive && styles.bgSlotLocked,
+        ]}
+        activeOpacity={1}
+        onPressIn={isInteractive ? pressIn : undefined}
+        onPressOut={isInteractive ? pressOut : undefined}
+        onPress={onPress}
+      >
+        <View style={[styles.bgMiniPreview, { backgroundColor: bg.sky }]}>
+          <View style={[styles.bgMiniMid, { backgroundColor: bg.mid }]} />
+          <View style={[styles.bgMiniGrass, { backgroundColor: bg.grass }]} />
+        </View>
+        {!isInteractive && (
+          <View style={styles.bgLockBadge}>
+            <Text style={styles.bgLockText}>LV{bg.unlockLevel}</Text>
+          </View>
+        )}
+        {bg.claimable && (
+          <View style={styles.bgClaimBadge}>
+            <Text style={styles.bgClaimIcon}>🎁</Text>
+          </View>
+        )}
+        <Text style={styles.bgSlotEmoji}>{bg.emoji}</Text>
+        <Text style={[styles.bgSlotName, !isInteractive && styles.bgSlotNameLocked]}>{bg.name}</Text>
+        {isSelected && <View style={styles.bgSelectedDot} />}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+}
+
 export default function ProfileScreen() {
   const [equippedId, setEquippedId] = useState<AccessoryId>('beret');
+  const [selectedBgId, setSelectedBgId] = useState('sunny');
   const router = useRouter();
   const equipped = ACCESSORIES.find(a => a.id === equippedId) ?? ACCESSORIES[1];
+  const selectedBg = BACKGROUNDS.find(b => b.id === selectedBgId) ?? BACKGROUNDS[0];
 
   const bobAnim = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -142,13 +267,20 @@ export default function ProfileScreen() {
     ).start();
   }, [bobAnim]);
 
-  const xpProgress = (PLAYER_XP - CURRENT_LEVEL_XP) / (NEXT_LEVEL_XP - CURRENT_LEVEL_XP);
-  const xpToNext = NEXT_LEVEL_XP - PLAYER_XP;
+  const xpProgress = PLAYER.xpProgress;
 
   const handleAccPress = (acc: Accessory) => {
     if (acc.unlocked) {
       setEquippedId(acc.id);
     } else if (acc.claimable) {
+      router.push('/(tabs)/rewards' as any);
+    }
+  };
+
+  const handleBgPress = (bg: BgTheme) => {
+    if (bg.unlocked) {
+      setSelectedBgId(bg.id);
+    } else if (bg.claimable) {
       router.push('/(tabs)/rewards' as any);
     }
   };
@@ -164,41 +296,64 @@ export default function ProfileScreen() {
         </View>
 
         {/* Meadow Stage */}
-        <View style={styles.meadowStage}>
-          <View style={styles.skySection}>
+        <View style={[styles.meadowStage, { borderColor: selectedBg.border }]}>
+          <View style={[styles.skySection, { backgroundColor: selectedBg.sky }]}>
             <Text style={styles.cloudL}>☁️  ☁️</Text>
             <Text style={styles.sunEmoji}>☀️</Text>
             <Text style={styles.cloudR}>☁️</Text>
           </View>
 
-          <View style={styles.characterArea}>
+          <View style={[styles.characterArea, { backgroundColor: selectedBg.sky }]}>
             <Animated.View style={{ transform: [{ translateY: bobAnim }] }}>
               <MochiCharacter accessory={equippedId} size={170} />
             </Animated.View>
             <View style={styles.mochiShadow} />
           </View>
 
-          <View style={styles.nameArea}>
+          <View style={[styles.nameArea, { backgroundColor: selectedBg.mid }]}>
             <Text style={styles.mochiNameLarge}>
               {equipped.id === 'none' ? 'Plain Mochi' : `${equipped.name} Mochi`}
             </Text>
             <Text style={styles.mochiSubLabel}>Jalan Besar Explorer</Text>
           </View>
 
-          <View style={styles.xpRow}>
+          <View style={[styles.xpRow, { backgroundColor: selectedBg.xpRow }]}>
             <View style={styles.levelBadge}>
-              <Text style={styles.levelText}>LV {PLAYER_LEVEL}</Text>
+              <Text style={styles.levelText}>LV {PLAYER.level}</Text>
             </View>
             <View style={styles.xpBarWrapper}>
               <View style={styles.xpBar}>
                 <View style={[styles.xpFill, { width: `${Math.round(xpProgress * 100)}%` }]} />
               </View>
-              <Text style={styles.xpLabel}>{PLAYER_XP} / {NEXT_LEVEL_XP} XP · {xpToNext} to LV {PLAYER_LEVEL + 1}</Text>
+              <Text style={styles.xpLabel}>{PLAYER.xp} / {PLAYER.nextLevelXp} XP · {PLAYER.xpToNext} to LV {PLAYER.level + 1}</Text>
             </View>
           </View>
 
-          <View style={styles.grassStrip}>
-            <Text style={styles.grassEmoji}>🌿 🌸 🌺 🌿 🌸 🌺 🌿</Text>
+          <View style={[styles.grassStrip, { backgroundColor: selectedBg.grass }]}>
+            <Text style={styles.grassEmoji}>{selectedBg.grassEmoji}</Text>
+          </View>
+        </View>
+
+        {/* Background picker */}
+        <View style={styles.section}>
+          <View style={styles.sectionRow}>
+            <Text style={styles.sectionLabel}>🌅 BACKGROUNDS</Text>
+            <Text style={styles.sectionHint}>Tap to switch</Text>
+          </View>
+          <View style={styles.bgGrid}>
+            {BACKGROUNDS.map((bg) => (
+              <BgSlot
+                key={bg.id}
+                bg={bg}
+                isSelected={bg.id === selectedBgId}
+                onPress={() => handleBgPress(bg)}
+              />
+            ))}
+          </View>
+          <View style={styles.lockedHint}>
+            <Text style={styles.lockedHintText}>
+              🔒 Level up to unlock · 🎁 Claim on Rewards page
+            </Text>
           </View>
         </View>
 
@@ -210,7 +365,7 @@ export default function ProfileScreen() {
         >
           <Text style={styles.claimCalloutEmoji}>🎁</Text>
           <View style={{ flex: 1 }}>
-            <Text style={styles.claimCalloutTitle}>LV 4 Reward Ready!</Text>
+            <Text style={styles.claimCalloutTitle}>LV {PLAYER.level} Reward Ready!</Text>
             <Text style={styles.claimCalloutSub}>Tap to claim your Hardhat on Rewards page</Text>
           </View>
           <Text style={styles.claimCalloutArrow}>›</Text>
@@ -289,9 +444,8 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 26, color: colors.text, fontWeight: '800', letterSpacing: -0.5 },
 
   // Meadow Stage
-  meadowStage: { borderRadius: 20, overflow: 'hidden', marginBottom: 14, borderWidth: 1.5, borderColor: '#A8D8EA' },
+  meadowStage: { borderRadius: 20, overflow: 'hidden', marginBottom: 14, borderWidth: 1.5 },
   skySection: {
-    backgroundColor: '#6DBFE0',
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
@@ -302,7 +456,7 @@ const styles = StyleSheet.create({
   cloudL: { fontSize: 22, opacity: 0.9 },
   cloudR: { fontSize: 17, opacity: 0.75, marginTop: 10 },
   sunEmoji: { fontSize: 30, marginTop: -4 },
-  characterArea: { backgroundColor: '#6DBFE0', alignItems: 'center', paddingTop: 6 },
+  characterArea: { alignItems: 'center', paddingTop: 6 },
   mochiShadow: {
     width: 120, height: 22,
     backgroundColor: 'rgba(20,10,0,0.22)',
@@ -310,21 +464,66 @@ const styles = StyleSheet.create({
     marginTop: -12,
     alignSelf: 'center',
   },
-  nameArea: { backgroundColor: '#8ACA5C', alignItems: 'center', paddingTop: 12, paddingBottom: 6 },
-  mochiNameLarge: { fontSize: 22, color: colors.pink, fontWeight: '900', letterSpacing: -0.3 },
-  mochiSubLabel: { fontSize: 12, color: '#3A6B1A', fontWeight: '600', marginTop: 2 },
+  nameArea: { alignItems: 'center', paddingTop: 12, paddingBottom: 6 },
+  mochiNameLarge: { fontSize: 22, color: '#FFFEF8', fontWeight: '900', letterSpacing: -0.3 },
+  mochiSubLabel: { fontSize: 12, color: 'rgba(255,255,255,0.8)', fontWeight: '600', marginTop: 2 },
   xpRow: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    paddingHorizontal: 16, paddingVertical: 10, backgroundColor: '#79BC4C',
+    paddingHorizontal: 16, paddingVertical: 10,
   },
   levelBadge: { backgroundColor: colors.pink, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 5 },
   levelText: { fontSize: 11, color: colors.white, fontWeight: '800', letterSpacing: 1 },
   xpBarWrapper: { flex: 1, gap: 5 },
   xpBar: { height: 7, backgroundColor: 'rgba(0,0,0,0.18)', borderRadius: 4, overflow: 'hidden' },
   xpFill: { height: '100%', backgroundColor: colors.pink, borderRadius: 4 },
-  xpLabel: { fontSize: 10, color: '#2A5A0A', fontWeight: '600' },
-  grassStrip: { backgroundColor: '#5BAD3F', paddingVertical: 10, alignItems: 'center' },
+  xpLabel: { fontSize: 10, color: 'rgba(255,255,255,0.85)', fontWeight: '600' },
+  grassStrip: { paddingVertical: 10, alignItems: 'center' },
   grassEmoji: { fontSize: 18, letterSpacing: 4 },
+
+  // Background Grid
+  bgGrid: { flexDirection: 'row', gap: 6 },
+  bgSlot: {
+    alignItems: 'center',
+    gap: 3,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    position: 'relative',
+  },
+  bgSlotSelected: {
+    borderColor: colors.pink,
+    backgroundColor: 'rgba(232,114,26,0.1)',
+  },
+  bgSlotLocked: { opacity: 0.6 },
+  bgMiniPreview: {
+    width: '100%',
+    height: 34,
+    borderRadius: 8,
+    overflow: 'hidden',
+    justifyContent: 'flex-end',
+  },
+  bgMiniMid: { height: 10 },
+  bgMiniGrass: { height: 8 },
+  bgLockBadge: {
+    position: 'absolute', top: 8, right: 2,
+    backgroundColor: '#6B4020',
+    borderRadius: 4,
+    paddingHorizontal: 3,
+    paddingVertical: 1,
+  },
+  bgLockText: { fontSize: 7, color: 'white', fontWeight: '800' },
+  bgClaimBadge: { position: 'absolute', top: 8, right: 2 },
+  bgClaimIcon: { fontSize: 10 },
+  bgSlotEmoji: { fontSize: 14 },
+  bgSlotName: { fontSize: 7, color: '#8B6040', fontWeight: '600', textAlign: 'center', lineHeight: 9 },
+  bgSlotNameLocked: { color: 'rgba(0,0,0,0.3)' },
+  bgSelectedDot: {
+    width: 6, height: 6, borderRadius: 3,
+    backgroundColor: colors.pink,
+    marginTop: 2,
+  },
 
   // Claim callout
   claimCallout: {
@@ -349,6 +548,14 @@ const styles = StyleSheet.create({
   sectionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
   sectionLabel: { fontSize: 11, color: colors.lpink, letterSpacing: 2, fontWeight: '700' },
   sectionHint: { fontSize: 11, color: colors.lgrey, fontStyle: 'italic' },
+
+  // Locked hint
+  lockedHint: {
+    marginTop: 10, backgroundColor: 'rgba(0,0,0,0.05)',
+    borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8,
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
+  },
+  lockedHintText: { fontSize: 11, color: colors.lgrey, textAlign: 'center', lineHeight: 16 },
 
   // Accessory Grid
   accessoryGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
@@ -389,12 +596,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.pink, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2, marginTop: 2,
   },
   equippedBadgeText: { fontSize: 8, color: colors.white, fontWeight: '800', letterSpacing: 0.5 },
-  lockedHint: {
-    marginTop: 10, backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8,
-    borderWidth: 1, borderColor: 'rgba(0,0,0,0.08)',
-  },
-  lockedHintText: { fontSize: 11, color: colors.lgrey, textAlign: 'center', lineHeight: 16 },
 
   // Stats
   statsGrid: { flexDirection: 'row', gap: 8 },

@@ -3,6 +3,7 @@ import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Platform, Animate
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
+import { PLAYER } from '@/constants/playerState';
 import MochiCharacter, { AccessoryId } from '@/components/MochiCharacter';
 import GoogleMap from '@/components/GoogleMap';
 
@@ -130,7 +131,7 @@ export default function HomeScreen() {
           </View>
           <View style={styles.headerRight}>
             <View style={styles.levelBadge}>
-              <Text style={styles.levelText}>LV 1</Text>
+              <Text style={styles.levelText}>LV {PLAYER.level}</Text>
             </View>
             <MochiCharacter accessory="bow" size={48} />
           </View>

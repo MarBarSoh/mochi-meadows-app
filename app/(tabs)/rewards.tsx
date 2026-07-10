@@ -2,11 +2,7 @@ import { useState, useRef } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '@/constants/colors';
-
-const PLAYER_LEVEL = 4;
-const PLAYER_XP = 2600;
-const NEXT_LEVEL_XP = 3500;
-const CURRENT_LEVEL_XP = 2200;
+import { PLAYER } from '@/constants/playerState';
 
 type LevelReward = {
   level: number;
@@ -122,8 +118,7 @@ export default function RewardsScreen() {
   const [levels, setLevels] = useState<LevelReward[]>(INITIAL_LEVELS);
   const [justClaimed, setJustClaimed] = useState<number | null>(null);
 
-  const xpProgress = (PLAYER_XP - CURRENT_LEVEL_XP) / (NEXT_LEVEL_XP - CURRENT_LEVEL_XP);
-  const xpToNext = NEXT_LEVEL_XP - PLAYER_XP;
+  const xpProgress = PLAYER.xpProgress;
 
   const handleClaim = (levelNum: number) => {
     setLevels(prev =>
@@ -147,22 +142,21 @@ export default function RewardsScreen() {
         <View style={styles.levelCard}>
           <View style={styles.levelCardTop}>
             <View style={styles.levelBadgeLarge}>
-              <Text style={styles.levelBadgeText}>LV {PLAYER_LEVEL}</Text>
+              <Text style={styles.levelBadgeText}>LV {PLAYER.level}</Text>
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.levelTitle}>Skilled Maker</Text>
-              <Text style={styles.levelXPText}>{PLAYER_XP.toLocaleString()} XP total</Text>
+              <Text style={styles.levelXPText}>{PLAYER.xp.toLocaleString()} XP total</Text>
             </View>
-            <Text style={styles.nextLevelLabel}>→ LV {PLAYER_LEVEL + 1}</Text>
+            <Text style={styles.nextLevelLabel}>→ LV {PLAYER.level + 1}</Text>
           </View>
           <View style={styles.levelProgressBar}>
             <View style={[styles.levelProgressFill, { width: `${Math.round(xpProgress * 100)}%` }]} />
           </View>
           <Text style={styles.levelProgressHint}>
-            {xpToNext} XP to reach Level {PLAYER_LEVEL + 1}
+            {PLAYER.xpToNext} XP to reach Level {PLAYER.level + 1}
           </Text>
 
-          {/* Just claimed celebration */}
           {justClaimed !== null && (
             <View style={styles.celebrationBanner}>
               <Text style={styles.celebrationText}>🎉 Reward claimed! Check your accessories!</Text>
@@ -176,7 +170,7 @@ export default function RewardsScreen() {
 
           {levels.map((lvl) => {
             const isLocked = !lvl.claimed && !lvl.claimable;
-            const xpNeeded = lvl.xpRequired - PLAYER_XP;
+            const xpNeeded = lvl.xpRequired - PLAYER.xp;
 
             return (
               <View
@@ -188,7 +182,6 @@ export default function RewardsScreen() {
                   isLocked && styles.milestoneCardLocked,
                 ]}
               >
-                {/* Left: level number */}
                 <View style={[
                   styles.milestoneLevelCircle,
                   lvl.claimed && styles.milestoneLevelCircleClaimed,
@@ -203,7 +196,6 @@ export default function RewardsScreen() {
                   </Text>
                 </View>
 
-                {/* Right: content */}
                 <View style={{ flex: 1 }}>
                   <View style={styles.milestoneTitleRow}>
                     <Text style={[
@@ -228,7 +220,6 @@ export default function RewardsScreen() {
                     )}
                   </View>
 
-                  {/* Accessories row */}
                   <View style={styles.accRow}>
                     {lvl.accessories.map((acc) => (
                       <View
@@ -241,7 +232,6 @@ export default function RewardsScreen() {
                     ))}
                   </View>
 
-                  {/* Claim button for claimable level */}
                   {lvl.claimable && (
                     <ClaimButton onClaim={() => handleClaim(lvl.level)} />
                   )}

@@ -3,6 +3,7 @@ import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Animated } from '
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
+import { PLAYER } from '@/constants/playerState';
 
 const FOOD_TRAIL = [
   { name: 'Swee Choon Dim Sum', est: 'Est. 1962', emoji: '🥟', done: true, reward: 'First Stamp' },
@@ -57,17 +58,17 @@ export default function AchievementsScreen() {
           <Text style={styles.overallLabel}>MEADOW PROGRESS</Text>
           <View style={styles.overallRow}>
             <View style={styles.overallStat}>
-              <Text style={styles.overallNum}>1</Text>
+              <Text style={styles.overallNum}>{PLAYER.stallsDone}</Text>
               <Text style={styles.overallStatLabel}>Stalls Visited</Text>
             </View>
             <View style={styles.overallDivider} />
             <View style={styles.overallStat}>
-              <Text style={styles.overallNum}>0</Text>
+              <Text style={styles.overallNum}>{PLAYER.landmarksDone}</Text>
               <Text style={styles.overallStatLabel}>Landmarks Found</Text>
             </View>
             <View style={styles.overallDivider} />
             <View style={styles.overallStat}>
-              <Text style={styles.overallNum}>LV 1</Text>
+              <Text style={styles.overallNum}>LV {PLAYER.level}</Text>
               <Text style={styles.overallStatLabel}>Meadow Level</Text>
             </View>
           </View>
