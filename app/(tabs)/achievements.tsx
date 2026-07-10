@@ -18,11 +18,17 @@ const TIME_TRAIL = [
   { name: 'Jalan Besar FC Mural', emoji: '⚽', done: false },
 ];
 
-const REWARDS = [
-  { name: 'CDC Voucher', desc: 'Complete the Food Trail', emoji: '🎟️', locked: true, color: colors.amber },
-  { name: 'Kapitan Cap', desc: 'Complete Time Travelling', emoji: '🧢', locked: true, color: colors.blue },
-  { name: 'Artist Beret', desc: 'Complete Recreate the Art', emoji: '🎓', locked: true, color: colors.purple },
-  { name: 'Hardhat & Toolbelt', desc: 'Complete Meet the Maker', emoji: '🪖', locked: true, color: colors.teal },
+const MURAL_TRAIL = [
+  { name: 'Jalan Besar\nFC Mural', emoji: '⚽', done: false, address: 'Tyrwhitt Rd' },
+  { name: 'Heritage\nTrades Mural', emoji: '🔨', done: false, address: 'Short Street' },
+  { name: 'Peranakan\nMural', emoji: '🌺', done: false, address: 'Petain Road' },
+  { name: 'Hawker\nHeritage Mural', emoji: '🍜', done: false, address: 'Jalan Besar' },
+];
+
+const MAKER_TRAIL = [
+  { name: 'Rad Son\nLighting', emoji: '💡', done: false, est: 'Est. 2006' },
+  { name: 'Heritage\nHardware', emoji: '🔩', done: false, est: 'Jalan Besar' },
+  { name: 'Rattan\nWorkshop', emoji: '🧺', done: false, est: 'Traditional' },
 ];
 
 export default function AchievementsScreen() {
@@ -164,23 +170,65 @@ export default function AchievementsScreen() {
           </View>
         </View>
 
-        {/* Rewards vault */}
+        {/* Recreate the Art */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>🏅 REWARD VAULT</Text>
-          <View style={styles.rewardsGrid}>
-            {REWARDS.map((r) => (
-              <View
-                key={r.name}
-                style={[styles.rewardCard, { backgroundColor: r.color.bg, borderColor: r.color.light }]}
-              >
-                <Text style={styles.rewardCardEmoji}>{r.emoji}</Text>
-                <Text style={[styles.rewardCardName, { color: r.color.dark }]}>{r.name}</Text>
-                <Text style={[styles.rewardCardDesc, { color: r.color.mid }]}>{r.desc}</Text>
-                <View style={[styles.rewardLocked, { backgroundColor: r.color.light }]}>
-                  <Text style={[styles.rewardLockedText, { color: r.color.dark }]}>🔒 Locked</Text>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionLabel}>🎨 RECREATE THE ART</Text>
+            <View style={[styles.sectionBadge, { backgroundColor: colors.purple.light }]}>
+              <Text style={[styles.sectionBadgeText, { color: colors.purple.dark }]}>0/4 DONE</Text>
+            </View>
+          </View>
+          <View style={[styles.trailCard, { borderColor: colors.purple.light, backgroundColor: colors.purple.bg }]}>
+            <View style={styles.sectionDesc}>
+              <Text style={[styles.sectionDescText, { color: colors.purple.dark }]}>
+                Find street murals and photograph your Mochi at each one
+              </Text>
+            </View>
+            <View style={styles.timeGrid}>
+              {MURAL_TRAIL.map((item) => (
+                <View key={item.name} style={styles.timeItem}>
+                  <View style={[styles.timeItemIcon, { backgroundColor: colors.purple.light }]}>
+                    <Text style={styles.timeItemEmoji}>{item.emoji}</Text>
+                  </View>
+                  <Text style={[styles.timeItemName, { color: colors.purple.dark }]}>{item.name}</Text>
+                  <Text style={[styles.timeItemAddress, { color: colors.purple.mid }]}>{item.address}</Text>
+                  <View style={[styles.timeItemStatus, { backgroundColor: colors.purple.light }]}>
+                    <Text style={[styles.timeItemStatusText, { color: colors.purple.mid }]}>Not started</Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* Meet the Maker */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionLabel}>🔧 MEET THE MAKER</Text>
+            <View style={[styles.sectionBadge, { backgroundColor: colors.teal.light }]}>
+              <Text style={[styles.sectionBadgeText, { color: colors.teal.dark }]}>0/3 DONE</Text>
+            </View>
+          </View>
+          <View style={[styles.trailCard, { borderColor: colors.teal.light, backgroundColor: colors.teal.bg }]}>
+            <View style={styles.sectionDesc}>
+              <Text style={[styles.sectionDescText, { color: colors.teal.dark }]}>
+                Visit traditional trade shops and discover their stories
+              </Text>
+            </View>
+            <View style={styles.timeGrid}>
+              {MAKER_TRAIL.map((item) => (
+                <View key={item.name} style={styles.timeItem}>
+                  <View style={[styles.timeItemIcon, { backgroundColor: colors.teal.light }]}>
+                    <Text style={styles.timeItemEmoji}>{item.emoji}</Text>
+                  </View>
+                  <Text style={[styles.timeItemName, { color: colors.teal.dark }]}>{item.name}</Text>
+                  <Text style={[styles.timeItemAddress, { color: colors.teal.mid }]}>{item.est}</Text>
+                  <View style={[styles.timeItemStatus, { backgroundColor: colors.teal.light }]}>
+                    <Text style={[styles.timeItemStatusText, { color: colors.teal.mid }]}>Not visited</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
         </View>
 
@@ -289,27 +337,15 @@ const styles = StyleSheet.create({
   },
   trailCTAText: { color: '#3A2008', fontWeight: '900', fontSize: 15, letterSpacing: 0.3 },
 
+  sectionDesc: { marginBottom: 12 },
+  sectionDescText: { fontSize: 12, fontStyle: 'italic', opacity: 0.8, lineHeight: 17 },
+
   timeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  timeItem: { width: '30%', alignItems: 'center', gap: 6 },
+  timeItem: { width: '22%', alignItems: 'center', gap: 5 },
   timeItemIcon: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
   timeItemEmoji: { fontSize: 22 },
-  timeItemName: { fontSize: 10, fontWeight: '600', textAlign: 'center', lineHeight: 13 },
-  timeItemStatus: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
-  timeItemStatusText: { fontSize: 9, fontWeight: '700' },
-
-  rewardsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  rewardCard: {
-    width: '47%',
-    borderRadius: 18,
-    padding: 14,
-    borderWidth: 3,
-    borderBottomWidth: 6,
-    alignItems: 'center',
-    gap: 6,
-  },
-  rewardCardEmoji: { fontSize: 32 },
-  rewardCardName: { fontSize: 13, fontWeight: '800', textAlign: 'center' },
-  rewardCardDesc: { fontSize: 10, textAlign: 'center', opacity: 0.8, lineHeight: 14 },
-  rewardLocked: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, marginTop: 4 },
-  rewardLockedText: { fontSize: 10, fontWeight: '700' },
+  timeItemName: { fontSize: 9, fontWeight: '700', textAlign: 'center', lineHeight: 12 },
+  timeItemAddress: { fontSize: 8, textAlign: 'center', opacity: 0.7 },
+  timeItemStatus: { borderRadius: 6, paddingHorizontal: 5, paddingVertical: 2 },
+  timeItemStatusText: { fontSize: 8, fontWeight: '700' },
 });

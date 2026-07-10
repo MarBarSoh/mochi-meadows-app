@@ -62,6 +62,14 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="about"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon emoji="📚" label="History" focused={focused} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
@@ -77,22 +85,22 @@ const styles = StyleSheet.create({
   },
   tabIcon: {
     alignItems: 'center',
-    gap: 3,
-    paddingHorizontal: 16,
+    gap: 2,
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 16,
   },
   tabIconActive: {
     backgroundColor: 'rgba(232,114,26,0.25)',
   },
   tabEmoji: {
-    fontSize: 22,
+    fontSize: 20,
   },
   tabLabel: {
-    fontSize: 10,
+    fontSize: 9,
     color: 'rgba(255,255,255,0.5)',
     fontWeight: '500',
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
   tabLabelActive: {
     color: '#E8721A',
