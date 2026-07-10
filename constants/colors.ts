@@ -1,13 +1,13 @@
 export const colors = {
-  dark:  '#C8EBF5',
+  dark:  '#FDF6EC',        // warm cream background
   white: '#FFFFFF',
-  text:  '#1B3D0E',
+  text:  '#3A2008',        // dark warm brown
 
-  pink:  '#5CB83A',
-  lpink: '#2D7A18',
+  pink:  '#E8721A',        // orange accent
+  lpink: '#8B5E30',        // dark brown label
 
-  grey:  '#4A7A2A',
-  lgrey: '#7AAA40',
+  grey:  '#A07848',        // warm mid brown
+  lgrey: '#C4A882',        // light warm brown / muted text
 
   blue:   { dark: '#0C447C', mid: '#185FA5', bg: '#EBF4FF', light: '#B5D4F4' },
   amber:  { dark: '#412402', mid: '#BA7517', bg: '#FFF9EE', light: '#FAD090' },

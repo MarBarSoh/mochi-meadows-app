@@ -60,8 +60,8 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#FFFFFF',
-    borderTopColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: '#4A3A20',
+    borderTopColor: 'rgba(255,255,255,0.12)',
     borderTopWidth: 1,
     height: Platform.OS === 'ios' ? 84 : 68,
     paddingBottom: Platform.OS === 'ios' ? 24 : 8,
@@ -75,18 +75,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   tabIconActive: {
-    backgroundColor: 'rgba(212,112,138,0.15)',
+    backgroundColor: 'rgba(232,114,26,0.25)',
   },
   tabEmoji: {
     fontSize: 22,
   },
   tabLabel: {
     fontSize: 10,
-    color: colors.lgrey,
+    color: 'rgba(255,255,255,0.5)',
     fontWeight: '500',
     letterSpacing: 0.3,
   },
   tabLabelActive: {
-    color: colors.lpink,
+    color: '#E8721A',
   },
 });

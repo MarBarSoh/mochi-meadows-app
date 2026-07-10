@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 20,
     borderWidth: 1.5,
-    borderColor: 'rgba(90,180,90,0.3)',
+    borderColor: 'rgba(196,168,130,0.5)',
   },
   meadowBg: {
     paddingTop: 14,
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   accItemEquipped: {
-    backgroundColor: 'rgba(92,184,58,0.2)',
+    backgroundColor: 'rgba(232,114,26,0.15)',
     borderColor: colors.pink,
   },
   accItemLocked: {
