@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 26,
-    color: colors.white,
+    color: colors.text,
     fontWeight: '800',
     letterSpacing: -0.5,
   },
@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
     height: 180,
   },
   mapLabelText: {
-    color: colors.white,
+    color: colors.text,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -507,12 +507,12 @@ const styles = StyleSheet.create({
   voucherBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(212,112,138,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.75)',
     borderRadius: 16,
     padding: 14,
     gap: 10,
     borderWidth: 1,
-    borderColor: 'rgba(212,112,138,0.3)',
+    borderColor: 'rgba(0,0,0,0.1)',
   },
   voucherEmoji: {
     fontSize: 28,

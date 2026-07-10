@@ -186,22 +186,22 @@ const styles = StyleSheet.create({
 
   header: { marginBottom: 20, paddingTop: 8 },
   headerSub: { fontSize: 10, color: colors.lpink, letterSpacing: 2, fontWeight: '700' },
-  headerTitle: { fontSize: 26, color: colors.white, fontWeight: '800', letterSpacing: -0.5 },
+  headerTitle: { fontSize: 26, color: colors.text, fontWeight: '800', letterSpacing: -0.5 },
 
   overallCard: {
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 16,
     padding: 16,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(0,0,0,0.1)',
   },
   overallLabel: { fontSize: 9, color: colors.lpink, fontWeight: '700', letterSpacing: 1.5, marginBottom: 12 },
   overallRow: { flexDirection: 'row', alignItems: 'center' },
   overallStat: { flex: 1, alignItems: 'center' },
-  overallNum: { fontSize: 24, color: colors.white, fontWeight: '800' },
+  overallNum: { fontSize: 24, color: colors.text, fontWeight: '800' },
   overallStatLabel: { fontSize: 10, color: colors.lgrey, marginTop: 2, textAlign: 'center' },
-  overallDivider: { width: 1, height: 40, backgroundColor: 'rgba(255,255,255,0.1)' },
+  overallDivider: { width: 1, height: 40, backgroundColor: 'rgba(0,0,0,0.1)' },
 
   section: { marginBottom: 24 },
   sectionHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
 
   trailProgressBar: {
     height: 6,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
     borderRadius: 3,
     marginBottom: 16,
     overflow: 'hidden',
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,

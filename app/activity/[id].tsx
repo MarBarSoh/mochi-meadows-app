@@ -138,7 +138,7 @@ export default function ActivityScreen() {
   if (!act) {
     return (
       <SafeAreaView style={[styles.safe, { justifyContent: 'center', alignItems: 'center' }]}>
-        <Text style={{ color: colors.white }}>Activity not found</Text>
+        <Text style={{ color: colors.text }}>Activity not found</Text>
       </SafeAreaView>
     );
   }
@@ -291,15 +291,15 @@ const styles = StyleSheet.create({
   rewardSub: { fontSize: 12, marginTop: 2 },
 
   heritageCard: {
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 14,
     padding: 14,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(0,0,0,0.1)',
   },
   heritageLabel: { fontSize: 10, color: colors.lpink, fontWeight: '700', letterSpacing: 1.5, marginBottom: 8 },
-  heritageText: { fontSize: 13, color: colors.white, lineHeight: 20, opacity: 0.85 },
+  heritageText: { fontSize: 13, color: colors.text, lineHeight: 20, opacity: 0.85 },
 
   section: { marginBottom: 20 },
   sectionLabel: { fontSize: 11, color: colors.lpink, letterSpacing: 2, fontWeight: '700', marginBottom: 12 },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   stepNum: { width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 },
   stepNumText: { color: colors.white, fontWeight: '800', fontSize: 13 },
   stepContent: { flex: 1 },
-  stepTitle: { fontSize: 14, color: colors.white, fontWeight: '700', marginBottom: 3 },
+  stepTitle: { fontSize: 14, color: colors.text, fontWeight: '700', marginBottom: 3 },
   stepDesc: { fontSize: 12, color: colors.lgrey, lineHeight: 18 },
 
   stallCard: {

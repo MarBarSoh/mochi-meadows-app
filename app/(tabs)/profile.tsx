@@ -208,22 +208,22 @@ const styles = StyleSheet.create({
   // Header
   header: { marginBottom: 16, paddingTop: 2 },
   headerSub: { fontSize: 10, color: colors.lpink, letterSpacing: 2, fontWeight: '700' },
-  headerTitle: { fontSize: 26, color: colors.white, fontWeight: '800', letterSpacing: -0.5 },
+  headerTitle: { fontSize: 26, color: colors.text, fontWeight: '800', letterSpacing: -0.5 },
 
   // Dressing room
   dressingRoom: {
-    backgroundColor: '#2A1A45',
+    backgroundColor: '#DCEEFA',
     borderRadius: 20,
     overflow: 'hidden',
     marginBottom: 20,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,181,197,0.2)',
+    borderColor: 'rgba(90,180,90,0.3)',
   },
   meadowBg: {
     paddingTop: 14,
     paddingBottom: 4,
     alignItems: 'center',
-    backgroundColor: '#311E52',
+    backgroundColor: '#C5E8F5',
   },
   meadowDecor: {
     fontSize: 16,
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   mochiName: {
     fontSize: 18,
-    color: colors.white,
+    color: colors.text,
     fontWeight: '800',
     letterSpacing: -0.3,
   },
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   xpBarWrapper: { flex: 1, gap: 5 },
   xpBar: {
     height: 7,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(0,0,0,0.12)',
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -311,18 +311,18 @@ const styles = StyleSheet.create({
   },
   accItem: {
     width: '29%',
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 14,
     padding: 10,
     alignItems: 'center',
     gap: 5,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(0,0,0,0.1)',
     position: 'relative',
     overflow: 'hidden',
   },
   accItemEquipped: {
-    backgroundColor: 'rgba(212,112,138,0.18)',
+    backgroundColor: 'rgba(92,184,58,0.2)',
     borderColor: colors.pink,
   },
   accItemLocked: {
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     lineHeight: 12,
   },
   accNameEquipped: { color: colors.lpink },
-  accNameLocked: { color: 'rgba(255,255,255,0.25)' },
+  accNameLocked: { color: 'rgba(0,0,0,0.3)' },
   equippedBadge: {
     backgroundColor: colors.pink,
     borderRadius: 6,
@@ -360,12 +360,12 @@ const styles = StyleSheet.create({
   },
   lockedHint: {
     marginTop: 10,
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: 'rgba(0,0,0,0.05)',
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
+    borderColor: 'rgba(0,0,0,0.08)',
   },
   lockedHintText: {
     fontSize: 11,
@@ -381,16 +381,16 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 14,
     padding: 10,
     alignItems: 'center',
     gap: 3,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.07)',
+    borderColor: 'rgba(0,0,0,0.1)',
   },
   statEmoji: { fontSize: 18 },
-  statValue: { fontSize: 16, color: colors.white, fontWeight: '800' },
+  statValue: { fontSize: 16, color: colors.text, fontWeight: '800' },
   statLabel: {
     fontSize: 9,
     color: colors.lgrey,
@@ -413,8 +413,8 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   biomeLocked: {
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    borderColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderColor: 'rgba(0,0,0,0.08)',
   },
   biomeEmoji: { fontSize: 24 },
   biomeName: {
