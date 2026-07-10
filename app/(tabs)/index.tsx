@@ -1,9 +1,19 @@
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { useRef } from 'react';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Platform, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
 import MochiCharacter, { AccessoryId } from '@/components/MochiCharacter';
 import GoogleMap from '@/components/GoogleMap';
+
+function useSpringPress(toScale = 0.96) {
+  const scale = useRef(new Animated.Value(1)).current;
+  const pressIn = () =>
+    Animated.spring(scale, { toValue: toScale, useNativeDriver: true, speed: 40, bounciness: 0 }).start();
+  const pressOut = () =>
+    Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 20, bounciness: 12 }).start();
+  return { scale, pressIn, pressOut };
+}
 
 const ACTIVITIES = [
   {
@@ -69,10 +79,39 @@ const ACTIVITIES = [
 ];
 
 
+function ActivityCard({ act, onPress }: { act: typeof ACTIVITIES[number]; onPress: () => void }) {
+  const spring = useSpringPress(0.93);
+  return (
+    <Animated.View style={[styles.activityCard, { backgroundColor: act.color.bg, transform: [{ scale: spring.scale }] }]}>
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        activeOpacity={1}
+        onPressIn={spring.pressIn}
+        onPressOut={spring.pressOut}
+        onPress={onPress}
+      >
+        <View style={[styles.activityIconBg, { backgroundColor: act.color.mid }]}>
+          <Text style={styles.activityEmoji}>{act.emoji}</Text>
+        </View>
+        <Text style={[styles.activityTag, { color: act.color.dark }]}>{act.tag}</Text>
+        <Text style={[styles.activityName, { color: act.color.dark }]}>{act.name}</Text>
+        <View style={styles.activityFooter}>
+          <Text style={[styles.activityProgress, { color: act.color.mid }]}>
+            {act.progress}/{act.total}
+          </Text>
+          <MochiCharacter accessory={act.mochi} size={42} />
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+}
+
 export default function HomeScreen() {
   const router = useRouter();
   const hero = ACTIVITIES[0];
   const others = ACTIVITIES.slice(1);
+  const heroSpring = useSpringPress(0.97);
+  const voucherSpring = useSpringPress(0.94);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -96,9 +135,12 @@ export default function HomeScreen() {
         </View>
 
         {/* ── Hero: Bring Back the Food ── */}
+        <Animated.View style={{ transform: [{ scale: heroSpring.scale }] }}>
         <TouchableOpacity
           style={styles.heroCard}
-          activeOpacity={0.88}
+          activeOpacity={1}
+          onPressIn={heroSpring.pressIn}
+          onPressOut={heroSpring.pressOut}
           onPress={() => router.push('/activity/food')}
         >
           <View style={styles.heroInner}>
@@ -159,6 +201,7 @@ export default function HomeScreen() {
             <MochiCharacter accessory="bow" size={100} />
           </View>
         </TouchableOpacity>
+        </Animated.View>
 
         {/* ── Map ── */}
         <View style={styles.section}>
@@ -173,24 +216,11 @@ export default function HomeScreen() {
           <Text style={styles.sectionLabel}>ALL ACTIVITIES</Text>
           <View style={styles.activityGrid}>
             {others.map((act) => (
-              <TouchableOpacity
+              <ActivityCard
                 key={act.id}
-                style={[styles.activityCard, { backgroundColor: act.color.bg }]}
-                activeOpacity={0.85}
+                act={act}
                 onPress={() => router.push(`/activity/${act.id}` as any)}
-              >
-                <View style={[styles.activityIconBg, { backgroundColor: act.color.mid }]}>
-                  <Text style={styles.activityEmoji}>{act.emoji}</Text>
-                </View>
-                <Text style={[styles.activityTag, { color: act.color.dark }]}>{act.tag}</Text>
-                <Text style={[styles.activityName, { color: act.color.dark }]}>{act.name}</Text>
-                <View style={styles.activityFooter}>
-                  <Text style={[styles.activityProgress, { color: act.color.mid }]}>
-                    {act.progress}/{act.total}
-                  </Text>
-                  <MochiCharacter accessory={act.mochi} size={42} />
-                </View>
-              </TouchableOpacity>
+              />
             ))}
           </View>
         </View>
@@ -202,12 +232,17 @@ export default function HomeScreen() {
             <Text style={styles.voucherTitle}>CDC Vouchers Available</Text>
             <Text style={styles.voucherSub}>Complete the Food Trail to claim yours</Text>
           </View>
-          <TouchableOpacity
-            style={styles.voucherBtn}
-            onPress={() => router.push('/activity/food')}
-          >
-            <Text style={styles.voucherBtnText}>Go →</Text>
-          </TouchableOpacity>
+          <Animated.View style={{ transform: [{ scale: voucherSpring.scale }] }}>
+            <TouchableOpacity
+              style={styles.voucherBtn}
+              activeOpacity={1}
+              onPressIn={voucherSpring.pressIn}
+              onPressOut={voucherSpring.pressOut}
+              onPress={() => router.push('/activity/food')}
+            >
+              <Text style={styles.voucherBtnText}>Go →</Text>
+            </TouchableOpacity>
+          </Animated.View>
         </View>
 
         <View style={{ height: 20 }} />

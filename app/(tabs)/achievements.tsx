@@ -1,4 +1,5 @@
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRef } from 'react';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
@@ -26,6 +27,11 @@ const REWARDS = [
 
 export default function AchievementsScreen() {
   const router = useRouter();
+  const ctaScale = useRef(new Animated.Value(1)).current;
+  const ctaPressIn = () =>
+    Animated.spring(ctaScale, { toValue: 0.94, useNativeDriver: true, speed: 40, bounciness: 0 }).start();
+  const ctaPressOut = () =>
+    Animated.spring(ctaScale, { toValue: 1, useNativeDriver: true, speed: 20, bounciness: 14 }).start();
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -119,12 +125,17 @@ export default function AchievementsScreen() {
               </View>
             ))}
 
-            <TouchableOpacity
-              style={[styles.trailCTA, { backgroundColor: colors.amber.mid }]}
-              onPress={() => router.push('/activity/food')}
-            >
-              <Text style={styles.trailCTAText}>Continue Food Trail →</Text>
-            </TouchableOpacity>
+            <Animated.View style={{ transform: [{ scale: ctaScale }] }}>
+              <TouchableOpacity
+                style={[styles.trailCTA, { backgroundColor: colors.amber.mid }]}
+                activeOpacity={1}
+                onPressIn={ctaPressIn}
+                onPressOut={ctaPressOut}
+                onPress={() => router.push('/activity/food')}
+              >
+                <Text style={styles.trailCTAText}>Continue Food Trail →</Text>
+              </TouchableOpacity>
+            </Animated.View>
           </View>
         </View>
 

@@ -1,4 +1,5 @@
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRef } from 'react';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
@@ -134,6 +135,11 @@ export default function ActivityScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const act = ACTIVITY_DATA[id as string];
+  const ctaScale = useRef(new Animated.Value(1)).current;
+  const ctaPressIn = () =>
+    Animated.spring(ctaScale, { toValue: 0.94, useNativeDriver: true, speed: 40, bounciness: 0 }).start();
+  const ctaPressOut = () =>
+    Animated.spring(ctaScale, { toValue: 1, useNativeDriver: true, speed: 20, bounciness: 14 }).start();
 
   if (!act) {
     return (
@@ -239,9 +245,16 @@ export default function ActivityScreen() {
         </View>
 
         {/* CTA */}
-        <TouchableOpacity style={[styles.cta, { backgroundColor: c.mid }]} activeOpacity={0.85}>
-          <Text style={styles.ctaText}>📷  Scan QR to Start</Text>
-        </TouchableOpacity>
+        <Animated.View style={{ transform: [{ scale: ctaScale }] }}>
+          <TouchableOpacity
+            style={[styles.cta, { backgroundColor: c.mid }]}
+            activeOpacity={1}
+            onPressIn={ctaPressIn}
+            onPressOut={ctaPressOut}
+          >
+            <Text style={styles.ctaText}>📷  Scan QR to Start</Text>
+          </TouchableOpacity>
+        </Animated.View>
 
         <View style={{ height: 20 }} />
       </ScrollView>
