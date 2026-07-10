@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
 import MochiCharacter, { AccessoryId } from '@/components/MochiCharacter';
+import GoogleMap from '@/components/GoogleMap';
 
 const ACTIVITIES = [
   {
@@ -67,13 +68,6 @@ const ACTIVITIES = [
   },
 ];
 
-const WAYPOINTS = [
-  { label: 'Swee Choon Dim Sum', emoji: '🥟', x: 22, y: 34 },
-  { label: 'Sungei Rd Laksa', emoji: '🍜', x: 58, y: 22 },
-  { label: 'Beach Rd Curry Rice', emoji: '🍛', x: 74, y: 52 },
-  { label: 'Rad Son Lighting', emoji: '💡', x: 40, y: 68 },
-  { label: 'Mural: Jalan Besar FC', emoji: '🎨', x: 62, y: 78 },
-];
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -170,29 +164,7 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>NEARBY IN JALAN BESAR</Text>
           <View style={styles.mapCard}>
-            <View style={styles.mapBg}>
-              {/* road lines */}
-              <View style={[styles.road, styles.roadH, { top: '40%' }]} />
-              <View style={[styles.road, styles.roadH, { top: '65%' }]} />
-              <View style={[styles.road, styles.roadV, { left: '35%' }]} />
-              <View style={[styles.road, styles.roadV, { left: '65%' }]} />
-
-              {/* waypoints */}
-              {WAYPOINTS.map((wp) => (
-                <View
-                  key={wp.label}
-                  style={[styles.waypoint, { left: `${wp.x}%`, top: `${wp.y}%` }]}
-                >
-                  <View style={styles.waypointPin}>
-                    <Text style={styles.waypointEmoji}>{wp.emoji}</Text>
-                  </View>
-                </View>
-              ))}
-
-              <View style={styles.mapLabel}>
-                <Text style={styles.mapLabelText}>📍 Jalan Besar</Text>
-              </View>
-            </View>
+            <GoogleMap height={200} />
           </View>
         </View>
 
@@ -476,55 +448,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     height: 180,
-  },
-  mapBg: {
-    flex: 1,
-    backgroundColor: '#2D1F4A',
-    position: 'relative',
-  },
-  road: {
-    position: 'absolute',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-  },
-  roadH: {
-    left: 0,
-    right: 0,
-    height: 18,
-  },
-  roadV: {
-    top: 0,
-    bottom: 0,
-    width: 18,
-  },
-  waypoint: {
-    position: 'absolute',
-    transform: [{ translateX: -18 }, { translateY: -18 }],
-  },
-  waypointPin: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.amber.mid,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: colors.white,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.4,
-    shadowRadius: 4,
-  },
-  waypointEmoji: {
-    fontSize: 18,
-  },
-  mapLabel: {
-    position: 'absolute',
-    bottom: 10,
-    left: 12,
-    backgroundColor: 'rgba(26,16,51,0.8)',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
   },
   mapLabelText: {
     color: colors.white,
