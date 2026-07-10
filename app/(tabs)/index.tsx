@@ -80,27 +80,29 @@ const ACTIVITIES = [
 
 
 function ActivityCard({ act, onPress }: { act: typeof ACTIVITIES[number]; onPress: () => void }) {
-  const spring = useSpringPress(0.93);
+  const spring = useSpringPress(0.96);
   return (
-    <Animated.View style={[styles.activityCard, { backgroundColor: act.color.bg, transform: [{ scale: spring.scale }] }]}>
+    <Animated.View style={{ transform: [{ scale: spring.scale }], marginBottom: 12 }}>
       <TouchableOpacity
-        style={{ flex: 1 }}
+        style={styles.activityBtn}
         activeOpacity={1}
         onPressIn={spring.pressIn}
         onPressOut={spring.pressOut}
         onPress={onPress}
       >
-        <View style={[styles.activityIconBg, { backgroundColor: act.color.mid }]}>
-          <Text style={styles.activityEmoji}>{act.emoji}</Text>
+        <View style={[styles.actBtnIconCircle, { backgroundColor: act.color.light }]}>
+          <Text style={styles.actBtnEmoji}>{act.emoji}</Text>
         </View>
-        <Text style={[styles.activityTag, { color: act.color.dark }]}>{act.tag}</Text>
-        <Text style={[styles.activityName, { color: act.color.dark }]}>{act.name}</Text>
-        <View style={styles.activityFooter}>
-          <Text style={[styles.activityProgress, { color: act.color.mid }]}>
-            {act.progress}/{act.total}
-          </Text>
-          <MochiCharacter accessory={act.mochi} size={42} />
+        <View style={styles.actBtnInfo}>
+          <Text style={[styles.actBtnTag, { color: act.color.mid }]}>{act.tag}</Text>
+          <Text style={styles.actBtnName}>{act.shortName}</Text>
+          <View style={[styles.actBtnPill, { backgroundColor: act.color.light }]}>
+            <Text style={[styles.actBtnProgress, { color: act.color.dark }]}>
+              {act.progress}/{act.total} done
+            </Text>
+          </View>
         </View>
+        <MochiCharacter accessory={act.mochi} size={52} />
       </TouchableOpacity>
     </Animated.View>
   );
@@ -306,12 +308,13 @@ const styles = StyleSheet.create({
   // Hero card
   heroCard: {
     backgroundColor: colors.amber.bg,
-    borderRadius: 20,
+    borderRadius: 22,
     padding: 20,
     marginBottom: 24,
     overflow: 'hidden',
-    borderWidth: 1.5,
-    borderColor: colors.amber.light,
+    borderWidth: 3,
+    borderColor: colors.amber.mid,
+    borderBottomWidth: 7,
     position: 'relative',
   },
   heroInner: {
@@ -430,32 +433,33 @@ const styles = StyleSheet.create({
   heroReward: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.6)',
-    borderRadius: 14,
+    backgroundColor: '#FFFEF8',
+    borderRadius: 18,
     padding: 12,
     gap: 10,
-    borderWidth: 1,
-    borderColor: colors.amber.light,
+    borderWidth: 3,
+    borderColor: '#6B4020',
+    borderBottomWidth: 6,
   },
   heroRewardEmoji: {
     fontSize: 24,
   },
   heroRewardLabel: {
     fontSize: 9,
-    color: colors.amber.dark,
+    color: '#6B4020',
     fontWeight: '700',
     letterSpacing: 1,
     opacity: 0.7,
   },
   heroRewardValue: {
     fontSize: 13,
-    color: colors.amber.dark,
-    fontWeight: '700',
+    color: '#3A2008',
+    fontWeight: '800',
   },
   heroArrow: {
     fontSize: 22,
-    color: colors.amber.mid,
-    fontWeight: '700',
+    color: '#6B4020',
+    fontWeight: '900',
     marginLeft: 'auto',
   },
   heroMochi: {
@@ -490,64 +494,53 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Activity grid
+  // Activity list (game-button style)
   activityGrid: {
+    flexDirection: 'column',
+  },
+  activityBtn: {
+    backgroundColor: '#FFFEF8',
+    borderRadius: 22,
+    borderWidth: 3,
+    borderColor: '#6B4020',
+    borderBottomWidth: 7,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
+    alignItems: 'center',
+    gap: 14,
   },
-  activityCard: {
-    width: '47%',
-    borderRadius: 16,
-    padding: 14,
-    minHeight: 130,
-  },
-  activityIconBg: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  actBtnIconCircle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
+    flexShrink: 0,
   },
-  activityEmoji: {
-    fontSize: 20,
+  actBtnEmoji: { fontSize: 26 },
+  actBtnInfo: { flex: 1, gap: 4 },
+  actBtnTag: { fontSize: 9, fontWeight: '700', letterSpacing: 1.2, opacity: 0.8 },
+  actBtnName: { fontSize: 16, fontWeight: '900', color: '#3A2008', lineHeight: 19 },
+  actBtnPill: {
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    alignSelf: 'flex-start',
   },
-  activityTag: {
-    fontSize: 9,
-    fontWeight: '700',
-    letterSpacing: 1,
-    marginBottom: 4,
-    opacity: 0.7,
-  },
-  activityName: {
-    fontSize: 15,
-    fontWeight: '800',
-    lineHeight: 18,
-    flex: 1,
-  },
-  activityFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  activityProgress: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  activityMochi: {},
+  actBtnProgress: { fontSize: 10, fontWeight: '700' },
 
   // CDC voucher banner
   voucherBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.75)',
-    borderRadius: 16,
+    backgroundColor: '#FFFEF8',
+    borderRadius: 20,
     padding: 14,
     gap: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.1)',
+    borderWidth: 3,
+    borderColor: '#6B4020',
+    borderBottomWidth: 6,
   },
   voucherEmoji: {
     fontSize: 28,
@@ -556,9 +549,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   voucherTitle: {
-    color: colors.lpink,
+    color: '#3A2008',
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   voucherSub: {
     color: colors.lgrey,
@@ -567,13 +560,16 @@ const styles = StyleSheet.create({
   },
   voucherBtn: {
     backgroundColor: colors.pink,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderWidth: 3,
+    borderColor: '#C45A00',
+    borderBottomWidth: 5,
   },
   voucherBtnText: {
     color: colors.white,
-    fontWeight: '700',
+    fontWeight: '900',
     fontSize: 13,
   },
 });

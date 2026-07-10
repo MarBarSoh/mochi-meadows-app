@@ -221,9 +221,10 @@ const styles = StyleSheet.create({
   sectionBadgeText: { fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
 
   trailCard: {
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
-    borderWidth: 1.5,
+    borderWidth: 3,
+    borderBottomWidth: 6,
   },
   trailRewardRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 },
   trailRewardEmoji: { fontSize: 28 },
@@ -277,12 +278,16 @@ const styles = StyleSheet.create({
   doneChip: { fontSize: 12, fontWeight: '700', color: '#22c55e' },
 
   trailCTA: {
-    borderRadius: 12,
-    paddingVertical: 12,
+    backgroundColor: '#FFFEF8',
+    borderRadius: 20,
+    borderWidth: 3,
+    borderColor: '#6B4020',
+    borderBottomWidth: 7,
+    paddingVertical: 14,
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 10,
   },
-  trailCTAText: { color: colors.white, fontWeight: '700', fontSize: 14 },
+  trailCTAText: { color: '#3A2008', fontWeight: '900', fontSize: 15, letterSpacing: 0.3 },
 
   timeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   timeItem: { width: '30%', alignItems: 'center', gap: 6 },
@@ -295,9 +300,10 @@ const styles = StyleSheet.create({
   rewardsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   rewardCard: {
     width: '47%',
-    borderRadius: 14,
+    borderRadius: 18,
     padding: 14,
-    borderWidth: 1.5,
+    borderWidth: 3,
+    borderBottomWidth: 6,
     alignItems: 'center',
     gap: 6,
   },

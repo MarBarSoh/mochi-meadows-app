@@ -347,10 +347,14 @@ const styles = StyleSheet.create({
   tipText: { fontSize: 13, lineHeight: 18, opacity: 0.85 },
 
   cta: {
-    borderRadius: 16,
-    paddingVertical: 16,
+    backgroundColor: '#FFFEF8',
+    borderRadius: 22,
+    borderWidth: 3,
+    borderColor: '#6B4020',
+    borderBottomWidth: 7,
+    paddingVertical: 18,
     alignItems: 'center',
     marginTop: 4,
   },
-  ctaText: { color: colors.white, fontWeight: '800', fontSize: 16 },
+  ctaText: { color: '#3A2008', fontWeight: '900', fontSize: 17, letterSpacing: 0.3 },
 });
