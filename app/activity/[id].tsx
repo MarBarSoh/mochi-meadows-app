@@ -1,9 +1,11 @@
 import { useRef } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { colors } from '@/constants/colors';
 import MochiCharacter, { AccessoryId } from '@/components/MochiCharacter';
+
+const meadow = require('../../assets/images/meadow.png');
 
 const ACTIVITY_DATA: Record<string, any> = {
   food: {
@@ -158,11 +160,13 @@ export default function ActivityScreen() {
   const c = act.color;
 
   return (
+    <ImageBackground source={meadow} style={{ flex: 1 }} resizeMode="cover">
     <SafeAreaView style={styles.safe} edges={['top']}>
       <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
         <Text style={styles.backText}>← Back</Text>
       </TouchableOpacity>
 
+      <View style={styles.actCardPanel}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -299,17 +303,30 @@ export default function ActivityScreen() {
 
         <View style={{ height: 20 }} />
       </ScrollView>
+      </View>
     </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.dark },
+  safe: { flex: 1 },
   scroll: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 16 },
+  actCardPanel: {
+    flex: 1,
+    backgroundColor: 'rgba(253,246,236,0.97)',
+    overflow: 'hidden',
+  },
 
-  backBtn: { paddingHorizontal: 20, paddingVertical: 12 },
-  backText: { color: colors.lpink, fontSize: 15, fontWeight: '600' },
+  backBtn: {
+    paddingHorizontal: 20, paddingVertical: 12,
+    flexDirection: 'row', alignItems: 'center',
+  },
+  backText: {
+    color: '#FFFEF8', fontSize: 16, fontWeight: '800',
+    textShadowColor: '#4A2000', textShadowOffset: { width: 1, height: 1 }, textShadowRadius: 2,
+  },
 
   heroHeader: {
     borderRadius: 20,

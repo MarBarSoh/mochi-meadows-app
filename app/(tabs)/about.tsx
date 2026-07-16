@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Platform, UIManager, LayoutAnimation } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Platform, UIManager, LayoutAnimation, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '@/constants/colors';
+import { PLAYER } from '@/constants/playerState';
+
+const meadow = require('../../assets/images/meadow.png');
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -121,14 +124,21 @@ export default function AboutScreen() {
   };
 
   return (
+    <ImageBackground source={meadow} style={{ flex: 1 }} resizeMode="cover">
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerSub}>HERITAGE & HISTORY</Text>
-          <Text style={styles.headerTitle}>About Jalan Besar</Text>
+      {/* Profile chip */}
+      <View style={styles.topRow}>
+        <View style={styles.profileChip}>
+          <Text style={styles.profileName}>{PLAYER.name}</Text>
+          <View style={styles.avatarCircle}><Text style={{ fontSize: 16 }}>👤</Text></View>
         </View>
+      </View>
+      <View style={styles.pageTitle}>
+        <Text style={styles.pageTitleShadow}>JALAN BESAR</Text>
+        <Text style={styles.pageTitleText}>JALAN BESAR</Text>
+      </View>
+      <View style={styles.cardPanel}>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
         {/* Overview card */}
         <View style={styles.overviewCard}>
@@ -178,18 +188,51 @@ export default function AboutScreen() {
 
         <View style={{ height: 20 }} />
       </ScrollView>
+      </View>
     </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.dark },
+  safe: { flex: 1 },
   scroll: { flex: 1 },
   content: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 16 },
 
+  topRow: { alignItems: 'flex-end', paddingHorizontal: 16, paddingTop: 8 },
+  profileChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: 'rgba(255,255,255,0.88)', borderRadius: 20,
+    paddingHorizontal: 12, paddingVertical: 6,
+  },
+  profileName: { fontSize: 16, fontWeight: '700', fontStyle: 'italic', color: '#1A0A00' },
+  avatarCircle: {
+    width: 30, height: 30, borderRadius: 15,
+    backgroundColor: '#1A0A00', alignItems: 'center', justifyContent: 'center',
+  },
+
+  pageTitle: { paddingHorizontal: 20, marginTop: 10, marginBottom: 10, position: 'relative', height: 40 },
+  pageTitleShadow: {
+    position: 'absolute', left: 23, top: 3,
+    fontSize: 32, fontWeight: '900', fontStyle: 'italic', color: '#4A2000',
+  },
+  pageTitleText: {
+    position: 'absolute', left: 20, top: 0,
+    fontSize: 32, fontWeight: '900', fontStyle: 'italic', color: '#FF8C00',
+  },
+
+  cardPanel: {
+    flex: 1,
+    backgroundColor: 'rgba(253,246,236,0.97)',
+    borderTopLeftRadius: 28, borderTopRightRadius: 28,
+    overflow: 'hidden',
+    borderTopWidth: 3, borderLeftWidth: 2, borderRightWidth: 2,
+    borderColor: '#C9A878',
+  },
+
   header: { marginBottom: 18, paddingTop: 8 },
   headerSub: { fontSize: 10, color: colors.lpink, letterSpacing: 2, fontWeight: '700' },
-  headerTitle: { fontSize: 26, color: colors.text, fontWeight: '800', letterSpacing: -0.5 },
+  headerTitle: { fontSize: 26, color: '#3A2008', fontWeight: '800', letterSpacing: -0.5 },
 
   // Overview
   overviewCard: {

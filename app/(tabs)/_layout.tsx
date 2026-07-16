@@ -1,22 +1,26 @@
 import { Tabs } from 'expo-router';
-import { Platform, View, Text, StyleSheet } from 'react-native';
-import { colors } from '@/constants/colors';
-import MochiCharacter from '@/components/MochiCharacter';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 
-function TabIcon({ emoji, label, focused }: { emoji: string; label: string; focused: boolean }) {
+const tabGames = require('../../assets/images/tab-games.png');
+const tabShield = require('../../assets/images/tab-shield.png');
+const tabHome = require('../../assets/images/tab-home.png');
+const tabRewards = require('../../assets/images/tab-rewards.png');
+const tabMessages = require('../../assets/images/tab-messages.png');
+
+function TabIconImg({ src, focused, size = 32 }: { src: any; focused: boolean; size?: number }) {
   return (
-    <View style={[styles.tabIcon, focused && styles.tabIconActive]}>
-      <Text style={styles.tabEmoji}>{emoji}</Text>
-      <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>{label}</Text>
-    </View>
+    <Image
+      source={src}
+      style={{ width: size, height: size, opacity: focused ? 1 : 0.45 }}
+      resizeMode="contain"
+    />
   );
 }
 
-function MochiTabIcon({ label, focused }: { label: string; focused: boolean }) {
+function CenterTabIcon({ focused }: { focused: boolean }) {
   return (
-    <View style={[styles.tabIcon, focused && styles.tabIconActive]}>
-      <MochiCharacter accessory="bow" size={26} />
-      <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>{label}</Text>
+    <View style={[styles.centerIconWrapper, focused && styles.centerIconActive]}>
+      <Image source={tabHome} style={{ width: 38, height: 38 }} resizeMode="contain" />
     </View>
   );
 }
@@ -33,41 +37,32 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="🗺️" label="Explore" focused={focused} />
-          ),
+          tabBarIcon: ({ focused }) => <TabIconImg src={tabGames} focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="achievements"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="📖" label="Trail Book" focused={focused} />
-          ),
+          tabBarIcon: ({ focused }) => <TabIconImg src={tabShield} focused={focused} size={28} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MochiTabIcon label="My Mochi" focused={focused} />
-          ),
+          tabBarItemStyle: styles.centerTabItem,
+          tabBarIcon: ({ focused }) => <CenterTabIcon focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="rewards"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="🏅" label="Rewards" focused={focused} />
-          ),
+          tabBarIcon: ({ focused }) => <TabIconImg src={tabRewards} focused={focused} size={30} />,
         }}
       />
       <Tabs.Screen
         name="about"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="📚" label="History" focused={focused} />
-          ),
+          tabBarIcon: ({ focused }) => <TabIconImg src={tabMessages} focused={focused} />,
         }}
       />
     </Tabs>
@@ -76,33 +71,28 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#4A3A20',
-    borderTopColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: '#3D2B15',
+    borderTopColor: 'rgba(255,255,255,0.1)',
     borderTopWidth: 1,
     height: Platform.OS === 'ios' ? 84 : 68,
-    paddingBottom: Platform.OS === 'ios' ? 24 : 8,
-    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 10,
+    paddingTop: 10,
   },
-  tabIcon: {
+  centerTabItem: {
+    marginTop: -10,
+  },
+  centerIconWrapper: {
+    backgroundColor: 'rgba(233,204,116,0.35)',
+    borderRadius: 30,
+    width: 60,
+    height: 52,
     alignItems: 'center',
-    gap: 2,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 16,
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(233,204,116,0.3)',
   },
-  tabIconActive: {
-    backgroundColor: 'rgba(232,114,26,0.25)',
-  },
-  tabEmoji: {
-    fontSize: 20,
-  },
-  tabLabel: {
-    fontSize: 9,
-    color: 'rgba(255,255,255,0.5)',
-    fontWeight: '500',
-    letterSpacing: 0.2,
-  },
-  tabLabelActive: {
-    color: '#E8721A',
+  centerIconActive: {
+    backgroundColor: '#E9CC74',
+    borderColor: '#9B7A14',
   },
 });

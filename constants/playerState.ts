@@ -1,4 +1,5 @@
 export const PLAYER = {
+  name: 'Matthew',
   level: 4,
   xp: 2600,
   nextLevelXp: 3500,
