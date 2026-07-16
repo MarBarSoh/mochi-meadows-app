@@ -8,7 +8,7 @@ import { PLAYER } from '@/constants/playerState';
 const FOOD_TRAIL = [
   { name: 'Swee Choon Dim Sum', est: 'Est. 1962', emoji: '🥟', done: true, reward: 'First Stamp' },
   { name: 'Sungei Road Laksa', est: 'Heritage stall', emoji: '🍜', done: false, reward: 'Second Stamp' },
-  { name: 'Beach Road Curry Rice', est: 'Jalan Besar classic', emoji: '🍛', done: false, reward: 'CDC Voucher 🎟️' },
+  { name: 'Beach Road Curry Rice', est: 'Jalan Besar classic', emoji: '🍛', done: false, reward: 'Kaya Toast Hat 🍞' },
 ];
 
 const TIME_TRAIL = [
@@ -85,10 +85,10 @@ export default function AchievementsScreen() {
 
           <View style={[styles.trailCard, { borderColor: colors.amber.light, backgroundColor: colors.amber.bg }]}>
             <View style={styles.trailRewardRow}>
-              <Text style={styles.trailRewardEmoji}>🎟️</Text>
+              <Text style={styles.trailRewardEmoji}>🍞</Text>
               <View>
                 <Text style={[styles.trailRewardLabel, { color: colors.amber.dark }]}>FINAL REWARD</Text>
-                <Text style={[styles.trailRewardValue, { color: colors.amber.mid }]}>CDC Voucher</Text>
+                <Text style={[styles.trailRewardValue, { color: colors.amber.mid }]}>Kaya Toast Hat + Ice Kachang Headband</Text>
               </View>
               <View style={styles.trailProgress}>
                 <Text style={[styles.trailProgressNum, { color: colors.amber.mid }]}>1/3</Text>
@@ -233,6 +233,53 @@ export default function AchievementsScreen() {
           </View>
         </View>
 
+        {/* Heritage Journal */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionLabel}>📖 HERITAGE JOURNAL</Text>
+            <View style={[styles.sectionBadge, { backgroundColor: colors.purple.light }]}>
+              <Text style={[styles.sectionBadgeText, { color: colors.purple.dark }]}>1 ENTRY</Text>
+            </View>
+          </View>
+          <View style={[styles.trailCard, { borderColor: colors.purple.light, backgroundColor: colors.purple.bg }]}>
+            <Text style={[styles.sectionDescText, { color: colors.purple.dark }]}>
+              Every QR scan and Maker Stop visit unlocks a heritage story saved here. Your personal record of everything you discover in Jalan Besar.
+            </Text>
+
+            {/* Unlocked entry */}
+            <View style={styles.journalEntry}>
+              <View style={[styles.journalIcon, { backgroundColor: colors.purple.light }]}>
+                <Text style={{ fontSize: 20 }}>🥟</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.journalTitle, { color: colors.purple.dark }]}>Swee Choon Dim Sum</Text>
+                <Text style={[styles.journalMeta, { color: colors.purple.mid }]}>Est. 1962 · Food Trail · Visited today</Text>
+                <Text style={[styles.journalExcerpt, { color: colors.purple.dark }]}>
+                  One of Singapore's oldest dim sum restaurants. Swee Choon has served Jalan Besar since 1962 — through urban renewal, changing tastes, and everything in between. Their char siew pau recipe hasn't changed in decades...
+                </Text>
+              </View>
+            </View>
+
+            {/* Locked entries */}
+            {[
+              { name: 'Sungei Road Laksa', hint: 'Visit this stall to unlock its story' },
+              { name: 'Beach Road Curry Rice', hint: 'Visit this stall to unlock its story' },
+              { name: 'Jalan Besar Stadium', hint: 'Find this landmark to unlock its story' },
+              { name: 'Rad Son Lighting', hint: 'Visit this Maker Stop to unlock its story' },
+            ].map(item => (
+              <View key={item.name} style={styles.journalEntryLocked}>
+                <View style={[styles.journalIcon, { backgroundColor: 'rgba(0,0,0,0.06)' }]}>
+                  <Text style={{ fontSize: 18, opacity: 0.35 }}>🔒</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.journalLockedName}>{item.name}</Text>
+                  <Text style={styles.journalLockedHint}>{item.hint}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
         <View style={{ height: 20 }} />
       </ScrollView>
     </SafeAreaView>
@@ -340,6 +387,40 @@ const styles = StyleSheet.create({
 
   sectionDesc: { marginBottom: 12 },
   sectionDescText: { fontSize: 12, fontStyle: 'italic', opacity: 0.8, lineHeight: 17 },
+
+  // Heritage Journal
+  journalEntry: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.08)',
+    alignItems: 'flex-start',
+  },
+  journalEntryLocked: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.06)',
+    alignItems: 'center',
+    opacity: 0.6,
+  },
+  journalIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  journalTitle: { fontSize: 13, fontWeight: '800' },
+  journalMeta: { fontSize: 10, marginTop: 1, fontWeight: '600', opacity: 0.8 },
+  journalExcerpt: { fontSize: 12, lineHeight: 17, marginTop: 4, opacity: 0.8 },
+  journalLockedName: { fontSize: 12, fontWeight: '700', color: colors.lgrey },
+  journalLockedHint: { fontSize: 10, color: colors.lgrey, marginTop: 2 },
 
   timeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   timeItem: { width: '22%', alignItems: 'center', gap: 5 },

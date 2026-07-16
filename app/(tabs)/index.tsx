@@ -26,9 +26,9 @@ const ACTIVITIES = [
     color: colors.amber,
     progress: 1,
     total: 3,
-    reward: 'CDC Voucher',
-    rewardEmoji: '🎟️',
-    description: 'Visit 3 heritage hawker stalls\naround Jalan Besar',
+    reward: 'Food Accessories',
+    rewardEmoji: '🍞',
+    description: 'Group of 4+ · visit 3 heritage stalls\n& scan QR after purchase',
     tag: 'HERO ACTIVITY',
     hero: true,
   },
@@ -41,9 +41,9 @@ const ACTIVITIES = [
     color: colors.blue,
     progress: 0,
     total: 5,
-    reward: 'Kapitan Cap',
-    rewardEmoji: '🏅',
-    description: 'Match archival photos to real landmarks',
+    reward: 'Kapitan Cap + CDC Voucher',
+    rewardEmoji: '🎟️',
+    description: 'Match archival photos to real landmarks\n— unlock a CDC Voucher',
     tag: 'PHOTO HUNT',
     hero: false,
   },
@@ -56,10 +56,10 @@ const ACTIVITIES = [
     color: colors.purple,
     progress: 0,
     total: 4,
-    reward: 'Artist Beret',
-    rewardEmoji: '🎓',
-    description: 'Photograph Mochi at local murals',
-    tag: 'AR CAMERA',
+    reward: 'Artist Beret + Paint Palette',
+    rewardEmoji: '🎨',
+    description: 'Snap Mochi at murals in AR · submit to\ncommunity gallery for votes & XP',
+    tag: 'AR CAMERA + GALLERY',
     hero: false,
   },
   {
@@ -71,10 +71,10 @@ const ACTIVITIES = [
     color: colors.teal,
     progress: 0,
     total: 3,
-    reward: 'Hardhat & Toolbelt',
+    reward: 'Rattan Bag + Toolbelt',
     rewardEmoji: '🪖',
-    description: 'Discover traditional trade shops',
-    tag: 'SHOP VISIT',
+    description: 'Visit trade shops · race friends in\na Kahoot-style heritage quiz',
+    tag: 'QUIZ + SHOP VISIT',
     hero: false,
   },
 ];
@@ -159,8 +159,10 @@ export default function HomeScreen() {
             <Text style={styles.heroEmoji}>🍜</Text>
             <Text style={styles.heroTitle}>Bring Back{'\n'}the Food</Text>
             <Text style={styles.heroDesc}>
-              Visit 3 heritage hawker stalls and earn a{' '}
-              <Text style={styles.heroHighlight}>CDC Voucher</Text>
+              Go with{' '}
+              <Text style={styles.heroHighlight}>4+ friends</Text>
+              , visit 3 heritage stalls and earn{' '}
+              <Text style={styles.heroHighlight}>food accessories</Text>
             </Text>
 
             <View style={styles.heroProgress}>
@@ -190,10 +192,10 @@ export default function HomeScreen() {
             </View>
 
             <View style={styles.heroReward}>
-              <Text style={styles.heroRewardEmoji}>🎟️</Text>
+              <Text style={styles.heroRewardEmoji}>🍞</Text>
               <View>
                 <Text style={styles.heroRewardLabel}>COMPLETE TO UNLOCK</Text>
-                <Text style={styles.heroRewardValue}>CDC Voucher + Amber Mochi Set</Text>
+                <Text style={styles.heroRewardValue}>Kaya Toast Hat + Ice Kachang Headband</Text>
               </View>
               <Text style={styles.heroArrow}>›</Text>
             </View>
@@ -228,12 +230,34 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* ── Social Features ── */}
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>👥 SOCIAL FEATURES</Text>
+          <View style={styles.socialGrid}>
+            {[
+              { emoji: '🗺️', title: 'Social Meadow', desc: "See where friends' Mochi are exploring on the shared map", color: colors.teal },
+              { emoji: '🏆', title: 'Leaderboards', desc: 'Weekly rankings, friend challenges & group rewards', color: colors.amber },
+              { emoji: '🌍', title: 'Discovery Map', desc: 'Live heat-map of player activity across Jalan Besar', color: colors.blue },
+              { emoji: '📖', title: 'Heritage Journal', desc: 'Your personal log of every heritage story unlocked', color: colors.purple },
+            ].map(item => (
+              <View key={item.title} style={[styles.socialCard, { backgroundColor: item.color.bg, borderColor: item.color.light }]}>
+                <Text style={styles.socialCardEmoji}>{item.emoji}</Text>
+                <Text style={[styles.socialCardTitle, { color: item.color.dark }]}>{item.title}</Text>
+                <Text style={[styles.socialCardDesc, { color: item.color.mid }]}>{item.desc}</Text>
+                <View style={[styles.comingSoonPill, { backgroundColor: item.color.light }]}>
+                  <Text style={[styles.comingSoonText, { color: item.color.dark }]}>Coming Soon</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
         {/* ── CDC Voucher Banner ── */}
         <View style={styles.voucherBanner}>
           <Text style={styles.voucherEmoji}>🎟️</Text>
           <View style={styles.voucherText}>
             <Text style={styles.voucherTitle}>CDC Vouchers Available</Text>
-            <Text style={styles.voucherSub}>Complete the Food Trail to claim yours</Text>
+            <Text style={styles.voucherSub}>Complete 3 Time Travelling landmarks to claim yours</Text>
           </View>
           <Animated.View style={{ transform: [{ scale: voucherSpring.scale }] }}>
             <TouchableOpacity
@@ -241,7 +265,7 @@ export default function HomeScreen() {
               activeOpacity={1}
               onPressIn={voucherSpring.pressIn}
               onPressOut={voucherSpring.pressOut}
-              onPress={() => router.push('/activity/food')}
+              onPress={() => router.push('/activity/time')}
             >
               <Text style={styles.voucherBtnText}>Go →</Text>
             </TouchableOpacity>
@@ -530,6 +554,27 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   actBtnProgress: { fontSize: 10, fontWeight: '700' },
+
+  // Social features grid
+  socialGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  socialCard: {
+    width: '47%',
+    borderRadius: 16,
+    padding: 12,
+    borderWidth: 1.5,
+    gap: 4,
+  },
+  socialCardEmoji: { fontSize: 22 },
+  socialCardTitle: { fontSize: 12, fontWeight: '800' },
+  socialCardDesc: { fontSize: 10, lineHeight: 14, opacity: 0.85 },
+  comingSoonPill: {
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    alignSelf: 'flex-start',
+    marginTop: 4,
+  },
+  comingSoonText: { fontSize: 9, fontWeight: '700', letterSpacing: 0.3 },
 
   // CDC voucher banner
   voucherBanner: {

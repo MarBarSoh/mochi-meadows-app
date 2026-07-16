@@ -13,25 +13,27 @@ const ACTIVITY_DATA: Record<string, any> = {
     mochi: 'bow' as AccessoryId,
     color: colors.amber,
     tag: 'FOOD TRAIL',
-    tagline: 'Earn a CDC Voucher by visiting 3 heritage hawker stalls',
-    heritage: 'These stalls have fed Jalan Besar for generations. Swee Choon has served dim sum since 1962.',
-    reward: 'CDC Voucher',
-    rewardEmoji: '🎟️',
-    rewardSub: 'Complete all 3 stalls',
-    accessory: 'Amber Mochi Set',
+    tagline: 'Visit 3 heritage stalls with 4+ friends — scan QR after each purchase',
+    heritage: 'These stalls have fed Jalan Besar for generations. Swee Choon has served dim sum since 1962, surviving waves of urban renewal and changing tastes. This is a group activity — exploring together makes the heritage stories richer and the meals even better.',
+    reward: 'Food Accessories',
+    rewardEmoji: '🍞',
+    rewardSub: 'Complete all 3 stalls (group of 4+)',
+    accessory: 'Kaya Toast Hat + Ice Kachang Headband',
+    groupNote: '👥 Minimum group of 4 required',
     steps: [
-      { step: '1', title: 'Pick a stall', desc: 'Choose any of the 3 heritage hawker stalls on your map.' },
-      { step: '2', title: 'Make a purchase', desc: 'Order and eat at the stall — support a local heritage business!' },
-      { step: '3', title: 'Scan the QR code', desc: 'Find the Mochi Meadows QR at the counter and scan to log your visit.' },
-      { step: '4', title: 'Collect your stamp', desc: 'Your Trail Book gets stamped. Complete all 3 for a CDC Voucher.' },
+      { step: '1', title: 'Form your group', desc: 'Gather at least 4 friends. This is a group activity — explore Jalan Besar together!' },
+      { step: '2', title: 'Visit a stall & order', desc: 'Head to a heritage hawker stall and make a purchase. You are supporting a real local heritage business.' },
+      { step: '3', title: 'Scan the QR at the counter', desc: 'After paying, find the Mochi Meadows QR code at the counter and scan it to log your group visit.' },
+      { step: '4', title: 'Read the stall story', desc: 'Unlock a short heritage story about the stall and its signature dish. Your group earns XP together.' },
     ],
     stalls: [
-      { name: 'Swee Choon Dim Sum', est: 'Est. 1962', desc: 'Legendary late-night dim sum. Famous for their char siew pau.', emoji: '🥟', done: true, address: '183-191 Jalan Besar' },
-      { name: 'Sungei Road Laksa', est: 'Heritage stall', desc: "Old-school charcoal-fire laksa that's been here for decades.", emoji: '🍜', done: false, address: 'Jalan Berseh' },
-      { name: 'Beach Road Curry Rice', est: 'Jalan Besar classic', desc: 'Classic mixed rice with crispy pork and braised vegetables.', emoji: '🍛', done: false, address: 'Beach Road' },
+      { name: 'Swee Choon Dim Sum', est: 'Est. 1962', desc: 'Legendary late-night dim sum. Famous for their char siew pau and open-kitchen style.', emoji: '🥟', done: true, address: '183–191 Jalan Besar' },
+      { name: 'Sungei Road Laksa', est: 'Heritage stall', desc: "Old-school charcoal-fire laksa that has been here for decades. A dying art form.", emoji: '🍜', done: false, address: 'Jalan Berseh' },
+      { name: 'Beach Road Curry Rice', est: 'Jalan Besar classic', desc: 'Classic mixed rice with crispy pork and braised vegetables. A true neighbourhood institution.', emoji: '🍛', done: false, address: 'Beach Road' },
     ],
     tips: [
-      '💡 Swee Choon is open late — great for a supper run',
+      '👥 Bring at least 4 friends — minimum group required to participate',
+      '💡 Swee Choon is open late — great for a supper run with your crew',
       '💡 Sungei Road Laksa closes by early afternoon',
       '💡 Beach Road Curry Rice is a lunchtime favourite',
     ],
@@ -43,29 +45,30 @@ const ACTIVITY_DATA: Record<string, any> = {
     mochi: 'cap' as AccessoryId,
     color: colors.blue,
     tag: 'PHOTO HUNT',
-    tagline: 'Match archival photos of Jalan Besar to real-life spots today',
-    heritage: 'Jalan Besar has transformed dramatically — from a kampung to a vibrant urban neighbourhood. These landmarks tell that story.',
-    reward: 'Kapitan Cap',
-    rewardEmoji: '🧢',
-    rewardSub: 'Find all 5 landmarks',
-    accessory: 'Kapitan Mochi Set',
+    tagline: 'Match archival photos to real Jalan Besar spots — unlock a CDC Voucher',
+    heritage: 'Jalan Besar has transformed dramatically — from a kampung to a vibrant urban neighbourhood. Rochor Centre once housed thousands; the former SCGS building now hosts arts spaces. These landmarks carry the memory of everything that was here before.',
+    reward: 'Kapitan Cap + CDC Voucher',
+    rewardEmoji: '🎟️',
+    rewardSub: 'Complete any 3 landmarks',
+    accessory: 'Colonial-Era Outfit',
     steps: [
-      { step: '1', title: 'View the archival photo', desc: 'Study the historical photo of a Jalan Besar landmark.' },
-      { step: '2', title: 'Navigate to the spot', desc: 'Use the map to find where the photo was taken.' },
-      { step: '3', title: 'Scan the QR on site', desc: "Scan the QR code at the location to confirm you're there." },
-      { step: '4', title: 'See then vs now', desc: "Unlock a side-by-side of the archival photo and today's view." },
+      { step: '1', title: 'Study the archival photo', desc: 'The app shows you a historical photograph of a Jalan Besar landmark as it looked decades ago.' },
+      { step: '2', title: 'Navigate to the real spot', desc: 'Use the in-app map and photo clues to locate the exact spot in real life today.' },
+      { step: '3', title: 'Scan the on-site QR', desc: 'At the location, scan the QR code on the heritage plaque or signboard to confirm your arrival.' },
+      { step: '4', title: 'See then vs now', desc: 'Unlock a side-by-side comparison of the archival photo and the spot as it looks today. History revealed.' },
     ],
     stalls: [
-      { name: 'Jalan Besar Stadium', est: '1930s–2014', desc: 'Once home to Singapore football — now Jalan Besar FC.', emoji: '🏟️', done: false, address: 'Tyrwhitt Road' },
-      { name: 'Former SCGS Building', est: 'Colonial era', desc: 'Now Celebration Arts. Grand colonial architecture remains.', emoji: '🏫', done: false, address: 'Short Street' },
-      { name: 'Rochor Centre', est: '1977–2015', desc: 'Iconic brutalist housing estate, demolished for North-South Corridor.', emoji: '🏙️', done: false, address: 'Rochor Road' },
-      { name: 'Petain Road Shophouses', est: 'Early 1900s', desc: 'Peranakan-style shophouses, one of the best-preserved rows.', emoji: '🏠', done: false, address: 'Petain Road' },
-      { name: 'Jalan Besar FC Mural', est: 'Community pride', desc: "Football murals celebrating the neighbourhood's sporting heritage.", emoji: '⚽', done: false, address: 'Tyrwhitt Road' },
+      { name: 'Jalan Besar Stadium', est: '1930s – 2014', desc: 'Once home to Singapore football. Demolished and rebuilt as Jalan Besar Stadium — the FC lives on.', emoji: '🏟️', done: false, address: 'Tyrwhitt Road' },
+      { name: 'Former SCGS Building', est: 'Colonial era', desc: 'Now Celebration Arts. The grand colonial architecture remains untouched — a ghost of the school that was.', emoji: '🏫', done: false, address: 'Short Street' },
+      { name: 'Rochor Centre', est: '1977 – 2015', desc: 'Iconic brutalist housing estate in vivid colours. Demolished for the North–South Corridor — only photos remain.', emoji: '🏙️', done: false, address: 'Rochor Road' },
+      { name: 'Petain Road Shophouses', est: 'Early 1900s', desc: 'Peranakan-style shophouses, one of the best-preserved rows in Singapore. A time capsule of early Jalan Besar.', emoji: '🏠', done: false, address: 'Petain Road' },
+      { name: 'Jalan Besar FC Mural', est: 'Community pride', desc: "Football murals celebrating the neighbourhood's sporting heritage and the club that carries its name.", emoji: '⚽', done: false, address: 'Tyrwhitt Road' },
     ],
     tips: [
-      "💡 A hint system is available if you're stuck",
-      '💡 Best done on foot — landmarks are within walking distance',
-      '💡 Look for the blue Mochi Meadows QR signs',
+      '🎟️ Complete any 3 landmarks to unlock a CDC Voucher',
+      '💡 A hint system is available if you get stuck on a location',
+      '💡 Best done on foot — all landmarks are within walking distance',
+      '💡 Look for the blue Mochi Meadows QR plaques on-site',
     ],
   },
   art: {
@@ -74,30 +77,32 @@ const ACTIVITY_DATA: Record<string, any> = {
     emoji: '🎨',
     mochi: 'beret' as AccessoryId,
     color: colors.purple,
-    tag: 'AR CAMERA',
-    tagline: 'Find street murals and photograph your Mochi at them',
-    heritage: "Jalan Besar's mural scene celebrates the community's past — from football to heritage trades.",
-    reward: 'Artist Beret',
-    rewardEmoji: '🎓',
-    rewardSub: 'Submit at 4 murals',
-    accessory: 'Bow Mochi Art Set',
+    tag: 'AR CAMERA + GALLERY',
+    tagline: 'Snap your Mochi at murals in AR, then submit your own artwork to the community gallery',
+    heritage: "Jalan Besar's murals celebrate the area's multicultural past — football, heritage trades, Peranakan culture, hawker life. The Community Gallery turns every player into part of the living artwork.",
+    reward: 'Artist Beret + Paint Palette',
+    rewardEmoji: '🎨',
+    rewardSub: 'Snap at murals + submit artwork',
+    accessory: 'Artist Mochi Set',
     steps: [
-      { step: '1', title: 'Find a mural', desc: 'Navigate to one of the marked murals on your map.' },
-      { step: '2', title: 'Open the AR camera', desc: 'Use the Mochi Meadows camera to place your Mochi in the scene.' },
-      { step: '3', title: 'Take the shot', desc: 'Snap a photo of your Mochi posing with the mural.' },
-      { step: '4', title: 'Submit to gallery', desc: 'Share your artwork to the community gallery for others to see.' },
+      { step: '1', title: 'Find a mural on the map', desc: 'Navigate to one of the marked mural locations across Jalan Besar using the in-app mural map.' },
+      { step: '2', title: 'Snapshot Challenge (AR)', desc: 'Open the AR camera, place your Mochi in front of the mural, and take the shot. Earn XP for each snap.' },
+      { step: '3', title: 'Create your own rendition', desc: 'Draw or create your own version of the mural and submit it through the app. One entry per mural per player.' },
+      { step: '4', title: 'Community gallery votes', desc: 'Your artwork enters the Community Gallery ranked by votes. Earn XP for every 50 votes you receive — capped at 300 votes.' },
     ],
     stalls: [
-      { name: 'Jalan Besar FC Mural', est: 'Tyrwhitt Road', desc: 'Massive football-themed mural celebrating the local club.', emoji: '⚽', done: false, address: 'Tyrwhitt Road' },
-      { name: 'Heritage Trades Mural', est: 'Short Street', desc: 'Depicts the trades that built Jalan Besar.', emoji: '🔨', done: false, address: 'Short Street' },
-      { name: 'Peranakan Mural', est: 'Petain Road', desc: 'Vibrant Peranakan motifs on a restored shophouse wall.', emoji: '🌺', done: false, address: 'Petain Road' },
-      { name: 'Hawker Mural', est: 'Jalan Besar', desc: 'Celebrates the food hawkers who are the heart of the neighbourhood.', emoji: '🍜', done: false, address: 'Jalan Besar' },
+      { name: 'Jalan Besar FC Mural', est: 'Tyrwhitt Road', desc: 'Massive football-themed mural celebrating the local club and neighbourhood sporting pride.', emoji: '⚽', done: false, address: 'Tyrwhitt Road' },
+      { name: 'Heritage Trades Mural', est: 'Short Street', desc: 'Depicts the traditional craftsmen and trades that built Jalan Besar over generations.', emoji: '🔨', done: false, address: 'Short Street' },
+      { name: 'Peranakan Mural', est: 'Petain Road', desc: 'Vibrant Peranakan motifs on a restored shophouse wall — a riot of colour and history.', emoji: '🌺', done: false, address: 'Petain Road' },
+      { name: 'Hawker Heritage Mural', est: 'Jalan Besar', desc: 'Celebrates the food hawkers who are the beating heart of the neighbourhood.', emoji: '🍜', done: false, address: 'Jalan Besar' },
     ],
     tips: [
-      '💡 A simple photo of the mural is the easiest submission',
-      '💡 Offline mode available — submit when you have signal',
-      '💡 Top submissions get featured in the gallery',
+      '🗳️ Get 50 community votes to earn bonus XP — up to 300 votes per artwork',
+      '📸 Only 1 submission per mural — choose your best shot',
+      '🏆 Top-voted artworks are featured at the top of the Community Gallery',
+      '💡 Offline mode available — submit your artwork when you have signal',
     ],
+    galleryNote: true,
   },
   maker: {
     id: 'maker',
@@ -105,28 +110,29 @@ const ACTIVITY_DATA: Record<string, any> = {
     emoji: '🔧',
     mochi: 'hardhat' as AccessoryId,
     color: colors.teal,
-    tag: 'SHOP VISIT',
-    tagline: 'Discover traditional trade shops and the people who run them',
-    heritage: 'Rad Son Lighting and shops like it have kept traditional trades alive for decades in Jalan Besar.',
-    reward: 'Hardhat & Toolbelt',
+    tag: 'QUIZ + SHOP VISIT',
+    tagline: 'Visit trade shops and race friends in a Kahoot-style heritage quiz',
+    heritage: 'Rad Son Lighting and shops like it have kept traditional trades alive in Jalan Besar for decades — invisible to most young visitors. The quiz is your excuse to walk in and discover what keeps these businesses going.',
+    reward: 'Rattan Bag + Toolbelt + Batik Headscarf',
     rewardEmoji: '🪖',
-    rewardSub: 'Visit 3 trade shops',
-    accessory: 'Hardhat Mochi Set',
+    rewardSub: 'Complete quiz at each shop (one-time XP)',
+    accessory: 'Hardware Cap',
     steps: [
-      { step: '1', title: 'Find a trade shop', desc: 'Navigate to one of the participating traditional shops.' },
-      { step: '2', title: 'Complete the challenge', desc: "Answer a discovery question about the shop's trade and history." },
-      { step: '3', title: 'Scan the shop QR', desc: 'Get the QR code from the shopkeeper after your visit.' },
-      { step: '4', title: "Unlock the shop's story", desc: 'Learn the full history of the trade and earn your reward.' },
+      { step: '1', title: 'Find a Maker Stop', desc: 'Navigate to a participating traditional trade shop listed as a Maker Stop on the map.' },
+      { step: '2', title: 'Scan the shop QR', desc: 'Ask the shopkeeper for the Mochi Meadows QR code and scan it to start the quiz.' },
+      { step: '3', title: 'Race your friends (Kahoot-style)', desc: 'Answer questions about the shop\'s heritage and trade. Faster correct answers score more points. Final group rankings determine bonus XP.' },
+      { step: '4', title: 'Earn XP & unlock the story', desc: 'All players earn XP based on their quiz result. Unlock the full heritage story of the business. One-time XP only — make it count!' },
     ],
     stalls: [
-      { name: 'Rad Son Lighting', est: 'Est. 2006', desc: 'Specialises in traditional and custom lighting fixtures. Ask about their vintage collection.', emoji: '💡', done: false, address: 'Jalan Besar Road' },
-      { name: 'Heritage Hardware', est: 'Jalan Besar', desc: "Old-school hardware store carrying tools you can't find elsewhere.", emoji: '🔩', done: false, address: 'Jalan Besar' },
-      { name: 'Rattan Workshop', est: 'Traditional craft', desc: 'One of the last rattan weavers in Singapore. Watch them work.', emoji: '🧺', done: false, address: 'Petain Road area' },
+      { name: 'Rad Son Lighting', est: 'Est. 2006', desc: 'Specialises in traditional and custom lighting fixtures. Ask about their vintage collection — each piece has a story.', emoji: '💡', done: false, address: 'Jalan Besar Road' },
+      { name: 'Heritage Hardware', est: 'Jalan Besar', desc: 'Old-school hardware store carrying tools you cannot find anywhere else. Still run the old-fashioned way.', emoji: '🔩', done: false, address: 'Jalan Besar' },
+      { name: 'Rattan Workshop', est: 'Traditional craft', desc: 'One of the last rattan weavers in Singapore. Watch them work — it is a disappearing art.', emoji: '🧺', done: false, address: 'Petain Road area' },
     ],
     tips: [
-      '💡 Shop owners are expecting Mochi Meadows players — just say hi!',
-      '💡 Meaningful reward requires actually talking to the shopkeeper',
-      '💡 Best done on weekday mornings when shops are less busy',
+      '🎮 Play solo or race friends — faster correct answers score higher',
+      '💡 You can only earn XP once per shop — make your visit count!',
+      '💡 Shop owners are expecting Mochi Meadows players — just walk in and say hi',
+      '💡 Best visited on weekday mornings when shops are less busy',
     ],
   },
 };
@@ -153,7 +159,6 @@ export default function ActivityScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      {/* Back button */}
       <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
         <Text style={styles.backText}>← Back</Text>
       </TouchableOpacity>
@@ -176,13 +181,21 @@ export default function ActivityScreen() {
           </View>
         </View>
 
+        {/* Group note for food trail */}
+        {act.groupNote && (
+          <View style={[styles.groupNoteCard, { backgroundColor: c.bg, borderColor: c.mid }]}>
+            <Text style={[styles.groupNoteText, { color: c.dark }]}>{act.groupNote}</Text>
+            <Text style={[styles.groupNoteSub, { color: c.mid }]}>Gather your crew before heading out</Text>
+          </View>
+        )}
+
         {/* Reward callout */}
         <View style={[styles.rewardCard, { backgroundColor: c.bg, borderColor: c.light }]}>
           <Text style={styles.rewardEmoji}>{act.rewardEmoji}</Text>
           <View style={styles.rewardText}>
             <Text style={styles.rewardLabel}>COMPLETE TO UNLOCK</Text>
             <Text style={[styles.rewardName, { color: c.dark }]}>{act.reward}</Text>
-            <Text style={[styles.rewardSub, { color: c.mid }]}>{act.rewardSub} + {act.accessory}</Text>
+            <Text style={[styles.rewardSub, { color: c.mid }]}>{act.rewardSub} · {act.accessory}</Text>
           </View>
         </View>
 
@@ -208,7 +221,7 @@ export default function ActivityScreen() {
           ))}
         </View>
 
-        {/* Locations / Stalls */}
+        {/* Locations / Stalls / Murals / Shops */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>
             {act.id === 'food' ? 'THE 3 STALLS' : act.id === 'time' ? 'THE 5 LANDMARKS' : act.id === 'art' ? 'THE 4 MURALS' : 'THE 3 SHOPS'}
@@ -233,6 +246,34 @@ export default function ActivityScreen() {
             </View>
           ))}
         </View>
+
+        {/* Community Gallery teaser for Art activity */}
+        {act.galleryNote && (
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>🖼️ COMMUNITY GALLERY</Text>
+            <View style={[styles.galleryCard, { backgroundColor: c.bg, borderColor: c.light }]}>
+              <Text style={[styles.galleryTitle, { color: c.dark }]}>Your artwork goes live for all players to see</Text>
+              <Text style={[styles.galleryDesc, { color: c.mid }]}>
+                All Recreate the Art submissions are displayed in the Community Gallery, sorted by votes. Top-rated artworks are featured first and earn bonus XP rewards.
+              </Text>
+              <View style={styles.galleryXpRow}>
+                {[
+                  { votes: '50 votes', xp: '+XP' },
+                  { votes: '100 votes', xp: '+XP' },
+                  { votes: '300 votes', xp: 'MAX XP (cap)' },
+                ].map(row => (
+                  <View key={row.votes} style={[styles.galleryXpChip, { backgroundColor: c.light }]}>
+                    <Text style={[styles.galleryXpVotes, { color: c.dark }]}>{row.votes}</Text>
+                    <Text style={[styles.galleryXpReward, { color: c.mid }]}>{row.xp}</Text>
+                  </View>
+                ))}
+              </View>
+              <View style={[styles.comingSoonBanner, { backgroundColor: c.light }]}>
+                <Text style={[styles.comingSoonBannerText, { color: c.dark }]}>🚧  Community Gallery coming soon</Text>
+              </View>
+            </View>
+          </View>
+        )}
 
         {/* Tips */}
         <View style={styles.section}>
@@ -273,7 +314,7 @@ const styles = StyleSheet.create({
   heroHeader: {
     borderRadius: 20,
     padding: 20,
-    marginBottom: 16,
+    marginBottom: 12,
     borderWidth: 1.5,
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -288,12 +329,22 @@ const styles = StyleSheet.create({
   heroTagline: { fontSize: 13, lineHeight: 18, opacity: 0.8 },
   heroMochi: { position: 'absolute', top: 0, right: -8, opacity: 0.22, pointerEvents: 'none' as any },
 
+  groupNoteCard: {
+    borderRadius: 14,
+    padding: 12,
+    marginBottom: 12,
+    borderWidth: 2,
+    borderStyle: 'dashed' as any,
+  },
+  groupNoteText: { fontSize: 14, fontWeight: '800' },
+  groupNoteSub: { fontSize: 11, marginTop: 2 },
+
   rewardCard: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 16,
     padding: 16,
-    marginBottom: 16,
+    marginBottom: 12,
     borderWidth: 1.5,
     gap: 14,
   },
@@ -301,7 +352,7 @@ const styles = StyleSheet.create({
   rewardText: { flex: 1 },
   rewardLabel: { fontSize: 9, color: colors.lgrey, fontWeight: '700', letterSpacing: 1.5 },
   rewardName: { fontSize: 18, fontWeight: '800', marginTop: 2 },
-  rewardSub: { fontSize: 12, marginTop: 2 },
+  rewardSub: { fontSize: 11, marginTop: 2, lineHeight: 16 },
 
   heritageCard: {
     backgroundColor: 'rgba(255,255,255,0.8)',
@@ -343,11 +394,36 @@ const styles = StyleSheet.create({
   stallDesc: { fontSize: 12, lineHeight: 17, marginTop: 4, opacity: 0.8 },
   stallAddress: { fontSize: 11, marginTop: 4, fontWeight: '600' },
 
+  // Community Gallery (Art activity)
+  galleryCard: {
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1.5,
+    gap: 10,
+  },
+  galleryTitle: { fontSize: 14, fontWeight: '800', lineHeight: 19 },
+  galleryDesc: { fontSize: 12, lineHeight: 18, opacity: 0.85 },
+  galleryXpRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
+  galleryXpChip: {
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    alignItems: 'center',
+  },
+  galleryXpVotes: { fontSize: 11, fontWeight: '800' },
+  galleryXpReward: { fontSize: 10, fontWeight: '700', marginTop: 1 },
+  comingSoonBanner: {
+    borderRadius: 10,
+    paddingVertical: 8,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  comingSoonBannerText: { fontSize: 12, fontWeight: '700', letterSpacing: 0.3 },
+
   tipsCard: { borderRadius: 14, padding: 14, borderWidth: 1, gap: 10 },
   tipText: { fontSize: 13, lineHeight: 18, opacity: 0.85 },
 
   cta: {
-    backgroundColor: '#FFFEF8',
     borderRadius: 22,
     borderWidth: 3,
     borderColor: '#6B4020',
@@ -356,5 +432,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 4,
   },
-  ctaText: { color: '#3A2008', fontWeight: '900', fontSize: 17, letterSpacing: 0.3 },
+  ctaText: { color: '#FFFEF8', fontWeight: '900', fontSize: 17, letterSpacing: 0.3 },
 });
