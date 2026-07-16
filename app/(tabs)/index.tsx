@@ -29,8 +29,7 @@ const ACTIVITIES = [
     reward: 'Food Accessories',
     rewardEmoji: '🍞',
     description: 'Group of 4+ · visit 3 heritage stalls\n& scan QR after purchase',
-    tag: 'HERO ACTIVITY',
-    hero: true,
+    tag: 'FOOD TRAIL',
   },
   {
     id: 'time',
@@ -45,7 +44,6 @@ const ACTIVITIES = [
     rewardEmoji: '🎟️',
     description: 'Match archival photos to real landmarks\n— unlock a CDC Voucher',
     tag: 'PHOTO HUNT',
-    hero: false,
   },
   {
     id: 'art',
@@ -60,7 +58,6 @@ const ACTIVITIES = [
     rewardEmoji: '🎨',
     description: 'Snap Mochi at murals in AR · submit to\ncommunity gallery for votes & XP',
     tag: 'AR CAMERA + GALLERY',
-    hero: false,
   },
   {
     id: 'maker',
@@ -75,7 +72,6 @@ const ACTIVITIES = [
     rewardEmoji: '🪖',
     description: 'Visit trade shops · race friends in\na Kahoot-style heritage quiz',
     tag: 'QUIZ + SHOP VISIT',
-    hero: false,
   },
 ];
 
@@ -111,9 +107,6 @@ function ActivityCard({ act, onPress }: { act: typeof ACTIVITIES[number]; onPres
 
 export default function HomeScreen() {
   const router = useRouter();
-  const hero = ACTIVITIES[0];
-  const others = ACTIVITIES.slice(1);
-  const heroSpring = useSpringPress(0.97);
   const voucherSpring = useSpringPress(0.94);
 
   return (
@@ -137,77 +130,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* ── Hero: Bring Back the Food ── */}
-        <Animated.View style={{ transform: [{ scale: heroSpring.scale }] }}>
-        <TouchableOpacity
-          style={styles.heroCard}
-          activeOpacity={1}
-          onPressIn={heroSpring.pressIn}
-          onPressOut={heroSpring.pressOut}
-          onPress={() => router.push('/activity/food')}
-        >
-          <View style={styles.heroInner}>
-            <View style={styles.heroBadgeRow}>
-              <View style={styles.heroBadge}>
-                <Text style={styles.heroBadgeText}>⭐ HERO ACTIVITY</Text>
-              </View>
-              <View style={styles.newBadge}>
-                <Text style={styles.newBadgeText}>MOST POPULAR</Text>
-              </View>
-            </View>
-
-            <Text style={styles.heroEmoji}>🍜</Text>
-            <Text style={styles.heroTitle}>Bring Back{'\n'}the Food</Text>
-            <Text style={styles.heroDesc}>
-              Go with{' '}
-              <Text style={styles.heroHighlight}>4+ friends</Text>
-              , visit 3 heritage stalls and earn{' '}
-              <Text style={styles.heroHighlight}>food accessories</Text>
-            </Text>
-
-            <View style={styles.heroProgress}>
-              <View style={styles.heroProgressBar}>
-                <View style={[styles.heroProgressFill, { width: `${(1 / 3) * 100}%` }]} />
-              </View>
-              <Text style={styles.heroProgressText}>1 of 3 stalls visited</Text>
-            </View>
-
-            <View style={styles.heroStalls}>
-              {[
-                { name: 'Swee Choon\nDim Sum', done: true, emoji: '🥟' },
-                { name: 'Sungei Rd\nLaksa', done: false, emoji: '🍜' },
-                { name: 'Beach Rd\nCurry Rice', done: false, emoji: '🍛' },
-              ].map((stall) => (
-                <View
-                  key={stall.name}
-                  style={[styles.stallChip, stall.done && styles.stallChipDone]}
-                >
-                  <Text style={styles.stallEmoji}>{stall.emoji}</Text>
-                  <Text style={[styles.stallName, stall.done && styles.stallNameDone]}>
-                    {stall.name}
-                  </Text>
-                  {stall.done && <Text style={styles.stallCheck}>✓</Text>}
-                </View>
-              ))}
-            </View>
-
-            <View style={styles.heroReward}>
-              <Text style={styles.heroRewardEmoji}>🍞</Text>
-              <View>
-                <Text style={styles.heroRewardLabel}>COMPLETE TO UNLOCK</Text>
-                <Text style={styles.heroRewardValue}>Kaya Toast Hat + Ice Kachang Headband</Text>
-              </View>
-              <Text style={styles.heroArrow}>›</Text>
-            </View>
-          </View>
-
-          {/* decorative mochi */}
-          <View style={styles.heroMochi}>
-            <MochiCharacter accessory="bow" size={100} />
-          </View>
-        </TouchableOpacity>
-        </Animated.View>
-
         {/* ── Map ── */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>NEARBY IN JALAN BESAR</Text>
@@ -216,11 +138,11 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* ── Other Activities ── */}
+        {/* ── All Activities ── */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>ALL ACTIVITIES</Text>
           <View style={styles.activityGrid}>
-            {others.map((act) => (
+            {ACTIVITIES.map((act) => (
               <ActivityCard
                 key={act.id}
                 act={act}
@@ -329,171 +251,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   mochiAvatar: {},
-
-  // Hero card
-  heroCard: {
-    backgroundColor: colors.amber.bg,
-    borderRadius: 22,
-    padding: 20,
-    marginBottom: 24,
-    overflow: 'hidden',
-    borderWidth: 3,
-    borderColor: colors.amber.mid,
-    borderBottomWidth: 7,
-    position: 'relative',
-  },
-  heroInner: {
-    flex: 1,
-  },
-  heroBadgeRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 12,
-  },
-  heroBadge: {
-    backgroundColor: colors.amber.mid,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  heroBadgeText: {
-    color: colors.white,
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.8,
-  },
-  newBadge: {
-    backgroundColor: colors.amber.light,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  newBadgeText: {
-    color: colors.amber.dark,
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.8,
-  },
-  heroEmoji: {
-    fontSize: 36,
-    marginBottom: 4,
-  },
-  heroTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: colors.amber.dark,
-    letterSpacing: -0.5,
-    lineHeight: 32,
-    marginBottom: 8,
-  },
-  heroDesc: {
-    fontSize: 14,
-    color: colors.amber.dark,
-    opacity: 0.8,
-    lineHeight: 20,
-    marginBottom: 16,
-  },
-  heroHighlight: {
-    fontWeight: '800',
-    color: colors.amber.mid,
-  },
-  heroProgress: {
-    marginBottom: 16,
-    gap: 6,
-  },
-  heroProgressBar: {
-    height: 8,
-    backgroundColor: colors.amber.light,
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  heroProgressFill: {
-    height: '100%',
-    backgroundColor: colors.amber.mid,
-    borderRadius: 4,
-  },
-  heroProgressText: {
-    fontSize: 12,
-    color: colors.amber.dark,
-    fontWeight: '600',
-    opacity: 0.8,
-  },
-  heroStalls: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 16,
-  },
-  stallChip: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.5)',
-    borderRadius: 12,
-    padding: 10,
-    alignItems: 'center',
-    gap: 4,
-    borderWidth: 1,
-    borderColor: colors.amber.light,
-  },
-  stallChipDone: {
-    backgroundColor: colors.amber.mid,
-    borderColor: colors.amber.mid,
-  },
-  stallEmoji: {
-    fontSize: 18,
-  },
-  stallName: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: colors.amber.dark,
-    textAlign: 'center',
-    lineHeight: 13,
-  },
-  stallNameDone: {
-    color: colors.white,
-  },
-  stallCheck: {
-    fontSize: 12,
-    color: colors.white,
-    fontWeight: '800',
-  },
-  heroReward: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFEF8',
-    borderRadius: 18,
-    padding: 12,
-    gap: 10,
-    borderWidth: 3,
-    borderColor: '#6B4020',
-    borderBottomWidth: 6,
-  },
-  heroRewardEmoji: {
-    fontSize: 24,
-  },
-  heroRewardLabel: {
-    fontSize: 9,
-    color: '#6B4020',
-    fontWeight: '700',
-    letterSpacing: 1,
-    opacity: 0.7,
-  },
-  heroRewardValue: {
-    fontSize: 13,
-    color: '#3A2008',
-    fontWeight: '800',
-  },
-  heroArrow: {
-    fontSize: 22,
-    color: '#6B4020',
-    fontWeight: '900',
-    marginLeft: 'auto',
-  },
-  heroMochi: {
-    position: 'absolute',
-    top: 0,
-    right: -10,
-    opacity: 0.22,
-    pointerEvents: 'none' as any,
-  },
 
   // Section
   section: {
