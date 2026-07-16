@@ -1,204 +1,575 @@
 import { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Platform, UIManager, LayoutAnimation, ImageBackground } from 'react-native';
+import {
+  ScrollView, View, Text, StyleSheet, TouchableOpacity,
+  ImageBackground, Modal, Pressable, Animated,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '@/constants/colors';
 import { PLAYER } from '@/constants/playerState';
+import MochiCharacter, { AccessoryId } from '@/components/MochiCharacter';
 
 const meadow = require('../../assets/images/meadow.png');
 
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
+// ── Fake friends data ─────────────────────────────────────────────────────────
 
-const OVERVIEW = `Jalan Besar — meaning "Big Road" in Malay — is a historic district in central Singapore, bounded by Rochor Road, Serangoon Road, and Lavender Street. Established under British colonial rule in the early 19th century, it grew into a bustling hub of shophouses, markets, and working-class community life.\n\nThe area has been home to South Indian Muslim traders, Hakka Chinese craftspeople, and generations of hawkers who shaped its distinctive identity. Today it sits at the crossroads of heritage and modernity — old shophouses stand beside trendy cafes, and traditional trades continue alongside new businesses.`;
+type Friend = {
+  id: string;
+  name: string;
+  level: number;
+  xp: number;
+  color: string;
+  darkColor: string;
+  accessory: AccessoryId;
+  mapX: number;  // position on Jalan Besar map (0-1 fraction)
+  mapY: number;
+  isOnline: boolean;
+  lastSeen: string;
+  stallsDone: number;
+  landmarksDone: number;
+  muralsDone: number;
+  shopsDone: number;
+  completedLocations: string[];
+  weeklyXP: number;
+};
 
-const TIMELINE = [
-  { year: '1820s', event: 'Area mapped under Raffles\' original town plan; Jalan Besar established as a main road northward.' },
-  { year: '1900s', event: 'Rows of two-storey shophouses built. South Indian Muslim and Hakka Chinese tradespeople settle in the area.' },
-  { year: '1930s', event: 'Jalan Besar Stadium opens. The Sungei Road flea market — the "Thieves\' Market" — begins trading along the Rochor River.' },
-  { year: '1960s–70s', event: 'Rapid post-independence urbanisation reshapes the neighbourhood. HDB public housing starts replacing older kampungs nearby.' },
-  { year: '1977', event: 'Rochor Centre completed — four iconic colourful towers that became one of Singapore\'s most beloved landmarks.' },
-  { year: '1990s', event: 'Urban Redevelopment Authority gazetted several Jalan Besar shophouse rows as conservation areas, protecting their pre-war facades.' },
-  { year: '2014', event: 'Old Jalan Besar Stadium demolished; a new 6,000-seat stadium opens on the same site.' },
-  { year: '2016–17', event: 'Rochor Centre demolished for the North-South Corridor. Sungei Road Market closes after 80+ years of operation.' },
-  { year: '2020', event: 'Singapore hawker culture — deeply tied to areas like Jalan Besar — inscribed on UNESCO\'s Intangible Cultural Heritage list.' },
-  { year: 'Today', event: 'Jalan Besar thrives as a heritage district with independent cafes, conserved shophouses, and traditional trades side by side.' },
+const FRIENDS: Friend[] = [
+  {
+    id: 'rayden',
+    name: 'Rayden',
+    level: 5,
+    xp: 3900,
+    color: '#E8721A',
+    darkColor: '#A34800',
+    accessory: 'cap',
+    mapX: 0.575,
+    mapY: 0.22,
+    isOnline: true,
+    lastSeen: 'Now',
+    stallsDone: 3,
+    landmarksDone: 3,
+    muralsDone: 2,
+    shopsDone: 1,
+    completedLocations: ['Swee Choon Dim Sum', 'Sungei Road Laksa', 'Beach Road Curry Rice', 'Jalan Besar Stadium', 'Former SCGS', 'Rochor Centre'],
+    weeklyXP: 1150,
+  },
+  {
+    id: 'rynee',
+    name: 'Rynee',
+    level: 3,
+    xp: 1500,
+    color: '#534AB7',
+    darkColor: '#26215C',
+    accessory: 'beret',
+    mapX: 0.30,
+    mapY: 0.73,
+    isOnline: true,
+    lastSeen: '5 min ago',
+    stallsDone: 1,
+    landmarksDone: 0,
+    muralsDone: 3,
+    shopsDone: 0,
+    completedLocations: ['Swee Choon Dim Sum', 'FC Mural', 'Heritage Trades Mural', 'Peranakan Mural'],
+    weeklyXP: 550,
+  },
+  {
+    id: 'richard',
+    name: 'Richard',
+    level: 2,
+    xp: 720,
+    color: '#185FA5',
+    darkColor: '#0C447C',
+    accessory: 'none',
+    mapX: 0.41,
+    mapY: 0.44,
+    isOnline: false,
+    lastSeen: '2h ago',
+    stallsDone: 0,
+    landmarksDone: 2,
+    muralsDone: 0,
+    shopsDone: 0,
+    completedLocations: ['Jalan Besar Stadium', 'Petain Road Shophouses'],
+    weeklyXP: 300,
+  },
+  {
+    id: 'jammy',
+    name: 'Jammy',
+    level: 4,
+    xp: 2800,
+    color: '#0F6E56',
+    darkColor: '#04342C',
+    accessory: 'hardhat',
+    mapX: 0.67,
+    mapY: 0.56,
+    isOnline: false,
+    lastSeen: 'Yesterday',
+    stallsDone: 2,
+    landmarksDone: 1,
+    muralsDone: 1,
+    shopsDone: 3,
+    completedLocations: ['Swee Choon Dim Sum', 'Sungei Road Laksa', 'Jalan Besar Stadium', 'FC Mural', 'Rad Son Lighting', 'Heritage Hardware', 'Rattan Workshop'],
+    weeklyXP: 880,
+  },
 ];
 
-const AREAS = [
-  {
-    key: 'stadium',
-    name: 'Jalan Besar Stadium',
-    emoji: '🏟️',
-    period: '1930 – present',
-    teaser: 'A sporting landmark that has defined the area for nearly a century.',
-    body: `The original Jalan Besar Stadium was built in 1930 and became the home ground of the Singapore national football team for decades, hosting some of the country's most historic matches. It was a place of genuine community pride, packed with local supporters who followed club and national football through Singapore's early years of independence.\n\nThe old stadium was demolished in 2014 after falling into disrepair and was replaced by a modern 6,000-seat facility that opened the same year. The new stadium continues to host domestic league football and is used by Tanjong Pagar United FC. It remains a symbol of Jalan Besar's proud sporting heritage — a neighbourhood that has always been deeply connected to the beautiful game.`,
-  },
-  {
-    key: 'rochor',
-    name: 'Rochor Centre',
-    emoji: '🏙️',
-    period: '1977 – 2016',
-    teaser: 'Singapore\'s beloved "Lego block" estate — colourful, communal, and controversially lost.',
-    body: `Rochor Centre was completed in 1977 as one of Singapore's earliest HDB (Housing Development Board) developments. Its four interconnected towers — painted in bright yellow, blue, green, and orange — made it one of the most instantly recognisable buildings in the city-state.\n\nBeyond its eye-catching appearance, Rochor Centre was a lively community hub. Its ground floor was packed with wet markets, hawker stalls, and small provision shops. Residents who grew up there remember it as warm, noisy, and full of life — the kind of lived-in community that defined old Singapore.\n\nIn 2011, the government announced Rochor Centre would be demolished to make way for the North-South Corridor expressway. Residents were resettled, the shops closed, and demolition was completed by 2016. The loss was widely mourned. Street photographers and heritage advocates documented the estate extensively before it came down, and it is still frequently cited as one of Singapore's most lamented demolitions.`,
-  },
-  {
-    key: 'petain',
-    name: 'Petain Road Shophouses',
-    emoji: '🏠',
-    period: 'c. 1920s – present',
-    teaser: 'One of Singapore\'s finest rows of Peranakan-style conserved shophouses.',
-    body: `Petain Road is lined with two-storey shophouses built in the 1920s and 1930s. The road is named after French Marshal Philippe Pétain — a celebrated hero of World War I, though later controversial for his role as head of the Vichy French government during World War II.\n\nThe shophouses feature ornate facades with colourful ceramic tiles, decorative plasterwork, carved timber screens, and eclectic motifs that blend Chinese, Malay, and European influences. This architectural style is sometimes called "Straits Eclectic" or colloquially "Peranakan shophouse style" — a distinctly Singaporean hybrid born of the multicultural Straits Settlements era.\n\nThe Urban Redevelopment Authority gazetted Petain Road as a conservation area, protecting its built heritage from demolition. Walking down Petain Road today, with its restored facades and potted plants on five-foot ways, offers one of the most atmospheric glimpses of pre-war Singapore still accessible to the public.`,
-  },
-  {
-    key: 'sungei',
-    name: 'Sungei Road Flea Market',
-    emoji: '🛒',
-    period: '1930s – 2017',
-    teaser: 'Singapore\'s oldest flea market — the legendary "Thieves\' Market" — that traded for over 80 years.',
-    body: `The Sungei Road Flea Market operated for over 80 years along the banks of the Rochor River. Vendors — many of them elderly men with their goods laid out on plastic sheets — sold an extraordinary mix of second-hand goods: vintage electronics, old tools, antique clocks, military surplus, used books, crockery, and outright curios.\n\nThe nickname "Thieves' Market" was more folk legend than reality. The market was a genuine institution beloved by bargain hunters, collectors, nostalgic older Singaporeans, and curious tourists. For many, a Sunday morning browse was a cherished ritual.\n\nIn July 2017, the Land Transport Authority closed the market to clear land for the Jalan Besar MRT station exit and other development. The closure attracted significant media attention and public lamentation — the market's last days were documented extensively, and many felt Singapore had lost something irreplaceable. A commemorative plaque now marks the site near Sungei Road.`,
-  },
-  {
-    key: 'shortstreet',
-    name: 'Short Street & Former SCGS',
-    emoji: '🏫',
-    period: 'c. 1910s – present',
-    teaser: 'Home to colonial-era educational heritage and one of Singapore\'s oldest girls\' schools.',
-    body: `Short Street was once home to the Singapore Chinese Girls' School (SCGS), one of Singapore's oldest schools for girls. SCGS was founded in 1899 and was based in Jalan Besar for much of its early history. The school was instrumental in promoting education for Chinese girls at a time when this was not yet common practice.\n\nSCGS relocated to Clementi Road in 1990. Its original building on Short Street — a graceful colonial-era structure with wide verandas, red-tiled rooflines, and arched openings — has since been repurposed and restored. The architecture reflects the civic confidence of Singapore's early 20th-century institutions, designed to last and to impress.\n\nToday, the area around Short Street is part of a broader enclave of conserved heritage buildings that includes arts and creative spaces, reflecting how Singapore reuses its colonial built environment for contemporary community purposes.`,
-  },
-  {
-    key: 'berseh',
-    name: 'Berseh Food Centre',
-    emoji: '🍜',
-    period: '1981 – present',
-    teaser: 'A hawker centre that houses some of Singapore\'s most legendary dishes, including the last charcoal-fire laksa.',
-    body: `Berseh Food Centre (also known as Jalan Besar Food Centre) opened in the early 1980s as part of Singapore's national hawker centre resettlement programme, which moved street food vendors from the roadside into organised, covered centres. It quickly became a neighbourhood institution.\n\nIts most famous tenant is the Sungei Road Laksa stall — one of the last in Singapore to use traditional charcoal fire to cook its broth. The stall has been run by the same family for generations. The laksa is characterised by its rich, smoky coconut milk broth and thin rice vermicelli, quite different from the richer Katong-style laksa found elsewhere. Queues form early; the stall often sells out by midday.\n\nHawker culture in Singapore — of which Berseh is a living example — was inscribed on UNESCO's Representative List of the Intangible Cultural Heritage of Humanity in 2020, recognising it as an irreplaceable part of Singapore's social fabric and national identity.`,
-  },
-  {
-    key: 'conservation',
-    name: 'Jalan Besar Conservation Area',
-    emoji: '🏛️',
-    period: 'c. 1900s – present',
-    teaser: 'A precinct of pre-war shophouses that preserves the story of Singapore\'s tradespeople and craftsmen.',
-    body: `The Jalan Besar Conservation Area encompasses rows of pre-war shophouses gazetted by the Urban Redevelopment Authority (URA) for conservation. Built primarily in the early 20th century, these shophouses originally housed Chinese clan associations, small manufacturers, hardware suppliers, and general provision shops.\n\nThe district has undergone significant gentrification since the 2000s. Many shophouses now house boutique hotels, independent cafes, creative studios, and concept stores. Yet traditional businesses continue to survive alongside the new — hardware stores, lighting shops (such as Rad Son Lighting on Jalan Besar Road, established 2006), and rattan craftsmen can still be found if you know where to look.\n\nThe preservation of Jalan Besar's shophouses is part of Singapore's broader effort to maintain the physical fabric of its heritage districts. The URA's conservation framework has protected hundreds of shophouses across Singapore since the 1980s, allowing them to be adapted for contemporary uses while their historic facades and structural form are retained — a balance the city continues to negotiate.`,
-  },
+// ── Map pins ──────────────────────────────────────────────────────────────────
+
+type Pin = {
+  id: string;
+  emoji: string;
+  label: string;
+  x: number; // 0-1 fraction of map width
+  y: number;
+  type: 'food' | 'time' | 'art' | 'maker';
+  done?: boolean;
+};
+
+const MAP_PINS: Pin[] = [
+  // Food trail
+  { id: 'swee', emoji: '🍜', label: 'Swee Choon Dim Sum', x: 0.582, y: 0.18, type: 'food', done: true },
+  { id: 'sungei', emoji: '🍜', label: 'Sungei Road Laksa', x: 0.20, y: 0.55, type: 'food' },
+  { id: 'beach', emoji: '🍛', label: 'Beach Road Curry Rice', x: 0.80, y: 0.65, type: 'food' },
+  // Time travelling
+  { id: 'stadium', emoji: '🏟️', label: 'Jalan Besar Stadium', x: 0.41, y: 0.38, type: 'time' },
+  { id: 'scgs', emoji: '🏫', label: 'Former SCGS Building', x: 0.73, y: 0.12, type: 'time' },
+  { id: 'rochor', emoji: '🏙️', label: 'Rochor Centre (site)', x: 0.14, y: 0.14, type: 'time' },
+  { id: 'petain', emoji: '🏠', label: 'Petain Road Shophouses', x: 0.31, y: 0.78, type: 'time' },
+  // Art
+  { id: 'fcmural', emoji: '⚽', label: 'Jalan Besar FC Mural', x: 0.46, y: 0.30, type: 'art' },
+  { id: 'heritagewall', emoji: '🎨', label: 'Heritage Trades Mural', x: 0.64, y: 0.26, type: 'art' },
+  // Maker
+  { id: 'radson', emoji: '💡', label: 'Rad Son Lighting', x: 0.67, y: 0.52, type: 'maker' },
+  { id: 'rattan', emoji: '🧺', label: 'Rattan Workshop', x: 0.25, y: 0.87, type: 'maker' },
 ];
 
-function AccordionItem({ area, isOpen, onToggle }: {
-  area: typeof AREAS[number];
-  isOpen: boolean;
-  onToggle: () => void;
+const PIN_COLORS: Record<Pin['type'], string> = {
+  food: '#BA7517',
+  time: '#185FA5',
+  art: '#534AB7',
+  maker: '#0F6E56',
+};
+
+// ── Leaderboard ───────────────────────────────────────────────────────────────
+
+const LEADERBOARD = [
+  { name: 'Rayden', level: 5, weeklyXP: 1150, color: '#E8721A', rank: 1 },
+  { name: 'Jammy', level: 4, weeklyXP: 880, color: '#0F6E56', rank: 2 },
+  { name: 'Matthew', level: PLAYER.level, weeklyXP: 640, color: '#D4708A', rank: 3 },
+  { name: 'Rynee', level: 3, weeklyXP: 550, color: '#534AB7', rank: 4 },
+  { name: 'Richard', level: 2, weeklyXP: 300, color: '#185FA5', rank: 5 },
+];
+
+const RANK_MEDALS = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+
+// ── Group challenge ───────────────────────────────────────────────────────────
+
+const GROUP_CHALLENGE = {
+  title: 'Jalan Besar Explorer',
+  desc: 'All 5 group members visit at least 1 heritage stall this week',
+  deadline: 'Ends Sunday 11:59 PM',
+  members: [
+    { name: 'Rayden', done: true },
+    { name: 'Jammy', done: true },
+    { name: 'Matthew', done: true },
+    { name: 'Rynee', done: false },
+    { name: 'Richard', done: false },
+  ],
+  reward: 'Exclusive Group Badge + 300 XP each',
+};
+
+// ── Map component ─────────────────────────────────────────────────────────────
+
+const MAP_W = 340;
+const MAP_H = 220;
+
+function JalanBesarMap({
+  onFriendPress,
+  onPinPress,
+}: {
+  onFriendPress: (f: Friend) => void;
+  onPinPress: (p: Pin) => void;
 }) {
   return (
-    <View style={[styles.accordionItem, isOpen && styles.accordionItemOpen]}>
-      <TouchableOpacity style={styles.accordionHeader} onPress={onToggle} activeOpacity={0.75}>
-        <View style={styles.accordionHeaderLeft}>
-          <Text style={styles.accordionEmoji}>{area.emoji}</Text>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.accordionName}>{area.name}</Text>
-            <Text style={styles.accordionPeriod}>{area.period}</Text>
-          </View>
-        </View>
-        <Text style={[styles.accordionChevron, isOpen && styles.accordionChevronOpen]}>›</Text>
-      </TouchableOpacity>
+    <View style={mapStyles.container}>
+      {/* Road grid */}
+      {/* Horizontal roads */}
+      <View style={[mapStyles.road, { top: 30, left: 0, width: MAP_W, height: 6 }]} />
+      <View style={[mapStyles.road, { top: 88, left: 0, width: MAP_W, height: 5 }]} />
+      <View style={[mapStyles.road, { top: 148, left: 0, width: MAP_W, height: 5 }]} />
+      <View style={[mapStyles.road, { top: 200, left: 0, width: MAP_W, height: 4 }]} />
+      {/* Vertical roads */}
+      <View style={[mapStyles.road, { left: 90, top: 0, width: 5, height: MAP_H }]} />
+      <View style={[mapStyles.road, { left: 195, top: 0, width: 6, height: MAP_H }]} />
+      <View style={[mapStyles.road, { left: 280, top: 0, width: 4, height: MAP_H }]} />
 
-      {!isOpen && (
-        <Text style={styles.accordionTeaser}>{area.teaser}</Text>
-      )}
+      {/* Road labels */}
+      <Text style={[mapStyles.roadLabel, { top: 20, left: 4 }]}>Lavender St</Text>
+      <Text style={[mapStyles.roadLabel, { top: 78, left: 4 }]}>Tyrwhitt Rd</Text>
+      <Text style={[mapStyles.roadLabel, { top: 138, left: 4 }]}>Kitchener Rd</Text>
+      <Text style={[mapStyles.roadLabel, { top: 190, left: 4 }]}>Rochor Rd</Text>
+      <Text style={[mapStyles.roadLabel, { top: 8, left: 198, width: 60 }]}>Jalan{'\n'}Besar Rd</Text>
 
-      {isOpen && (
-        <View style={styles.accordionBody}>
-          <Text style={styles.accordionBodyText}>{area.body}</Text>
-        </View>
-      )}
+      {/* Stadium block */}
+      <View style={[mapStyles.landmark, { left: 115, top: 96, width: 70, height: 48, backgroundColor: '#1E4A2A' }]} />
+      <Text style={[mapStyles.landmarkLabel, { left: 130, top: 113 }]}>Stadium</Text>
+
+      {/* Berseh block */}
+      <View style={[mapStyles.landmark, { left: 202, top: 35, width: 70, height: 48, backgroundColor: '#1A2E4A' }]} />
+
+      {/* Activity pins */}
+      {MAP_PINS.map(pin => (
+        <TouchableOpacity
+          key={pin.id}
+          style={[mapStyles.pin, {
+            left: pin.x * MAP_W - 12,
+            top: pin.y * MAP_H - 12,
+            backgroundColor: PIN_COLORS[pin.type],
+            borderWidth: pin.done ? 2 : 1,
+            borderColor: pin.done ? '#fff' : 'rgba(255,255,255,0.4)',
+          }]}
+          onPress={() => onPinPress(pin)}
+          activeOpacity={0.8}
+        >
+          <Text style={mapStyles.pinEmoji}>{pin.emoji}</Text>
+        </TouchableOpacity>
+      ))}
+
+      {/* Player's own marker */}
+      <View style={[mapStyles.selfMarker, { left: 0.54 * MAP_W - 16, top: 0.42 * MAP_H - 16 }]}>
+        <Text style={{ fontSize: 10 }}>🍡</Text>
+      </View>
+      <Text style={[mapStyles.markerLabel, { left: 0.54 * MAP_W - 22, top: 0.42 * MAP_H + 12, color: '#D4708A' }]}>You</Text>
+
+      {/* Friend markers */}
+      {FRIENDS.map(f => (
+        <TouchableOpacity
+          key={f.id}
+          style={[mapStyles.friendMarker, {
+            left: f.mapX * MAP_W - 14,
+            top: f.mapY * MAP_H - 14,
+            backgroundColor: f.color,
+            opacity: f.isOnline ? 1 : 0.65,
+          }]}
+          onPress={() => onFriendPress(f)}
+          activeOpacity={0.8}
+        >
+          <Text style={{ fontSize: 9, color: '#fff', fontWeight: '800' }}>{f.name[0]}</Text>
+          {f.isOnline && <View style={mapStyles.onlineDot} />}
+        </TouchableOpacity>
+      ))}
+      {FRIENDS.map(f => (
+        <Text
+          key={f.id + '_label'}
+          style={[mapStyles.markerLabel, {
+            left: f.mapX * MAP_W - 18,
+            top: f.mapY * MAP_H + 14,
+            color: f.color,
+          }]}
+          numberOfLines={1}
+        >
+          {f.name}
+        </Text>
+      ))}
     </View>
   );
 }
 
-export default function AboutScreen() {
-  const [openKey, setOpenKey] = useState<string | null>(null);
+// ── Friend detail modal ───────────────────────────────────────────────────────
 
-  const toggle = (key: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setOpenKey(prev => (prev === key ? null : key));
-  };
-
+function FriendModal({ friend, onClose }: { friend: Friend | null; onClose: () => void }) {
+  if (!friend) return null;
+  const total = friend.stallsDone + friend.landmarksDone + friend.muralsDone + friend.shopsDone;
   return (
-    <ImageBackground source={meadow} style={{ flex: 1 }} resizeMode="cover">
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      {/* Profile chip */}
-      <View style={styles.topRow}>
-        <View style={styles.profileChip}>
-          <Text style={styles.profileName}>{PLAYER.name}</Text>
-          <View style={styles.avatarCircle}><Text style={{ fontSize: 16 }}>👤</Text></View>
-        </View>
-      </View>
-      <View style={styles.pageTitle}>
-        <Text style={styles.pageTitleShadow}>JALAN BESAR</Text>
-        <Text style={styles.pageTitleText}>JALAN BESAR</Text>
-      </View>
-      <View style={styles.cardPanel}>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-
-        {/* Overview card */}
-        <View style={styles.overviewCard}>
-          <Text style={styles.overviewLabel}>📍 OVERVIEW</Text>
-          <Text style={styles.overviewText}>{OVERVIEW}</Text>
-        </View>
-
-        {/* Timeline */}
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>🕰️ BRIEF HISTORY</Text>
-          <View style={styles.timelineCard}>
-            {TIMELINE.map((item, i) => (
-              <View key={item.year} style={styles.timelineRow}>
-                <View style={styles.timelineLeft}>
-                  <Text style={styles.timelineYear}>{item.year}</Text>
-                  {i < TIMELINE.length - 1 && <View style={styles.timelineLine} />}
+    <Modal visible={!!friend} transparent animationType="fade" onRequestClose={onClose}>
+      <Pressable style={modalStyles.backdrop} onPress={onClose}>
+        <Pressable style={modalStyles.sheet} onPress={e => e.stopPropagation()}>
+          {/* Header */}
+          <View style={[modalStyles.header, { backgroundColor: friend.color }]}>
+            <MochiCharacter accessory={friend.accessory} size={72} />
+            <View style={{ flex: 1 }}>
+              <View style={modalStyles.onlineRow}>
+                <View style={[modalStyles.onlineBadge, { backgroundColor: friend.isOnline ? '#22c55e' : '#888' }]}>
+                  <Text style={modalStyles.onlineText}>{friend.isOnline ? '● ONLINE' : '○ OFFLINE'}</Text>
                 </View>
-                <Text style={styles.timelineEvent}>{item.event}</Text>
+                <Text style={modalStyles.lastSeen}>{friend.lastSeen}</Text>
+              </View>
+              <Text style={modalStyles.friendName}>{friend.name}</Text>
+              <Text style={modalStyles.friendLevel}>LV {friend.level} · {friend.xp.toLocaleString()} XP</Text>
+            </View>
+          </View>
+
+          {/* Progress */}
+          <View style={modalStyles.statsRow}>
+            {[
+              { label: 'Stalls', val: friend.stallsDone, max: 3, color: '#BA7517' },
+              { label: 'Landmarks', val: friend.landmarksDone, max: 5, color: '#185FA5' },
+              { label: 'Murals', val: friend.muralsDone, max: 4, color: '#534AB7' },
+              { label: 'Shops', val: friend.shopsDone, max: 3, color: '#0F6E56' },
+            ].map(s => (
+              <View key={s.label} style={modalStyles.statCell}>
+                <Text style={[modalStyles.statNum, { color: s.color }]}>{s.val}/{s.max}</Text>
+                <Text style={modalStyles.statLbl}>{s.label}</Text>
               </View>
             ))}
           </View>
-        </View>
 
-        {/* Areas accordion */}
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>🏘️ WELL-KNOWN AREAS</Text>
-          <Text style={styles.sectionHint}>Tap any area to read its history</Text>
-          <View style={styles.accordionList}>
-            {AREAS.map((area) => (
-              <AccordionItem
-                key={area.key}
-                area={area}
-                isOpen={openKey === area.key}
-                onToggle={() => toggle(area.key)}
-              />
+          {/* Completed locations */}
+          <Text style={modalStyles.secLabel}>📍 RECENTLY EXPLORED</Text>
+          <View style={modalStyles.locationList}>
+            {friend.completedLocations.slice(0, 4).map(loc => (
+              <View key={loc} style={[modalStyles.locationChip, { borderColor: friend.color }]}>
+                <Text style={[modalStyles.locationChipText, { color: friend.darkColor }]}>{loc}</Text>
+              </View>
             ))}
+            {friend.completedLocations.length > 4 && (
+              <View style={[modalStyles.locationChip, { backgroundColor: 'rgba(0,0,0,0.05)' }]}>
+                <Text style={modalStyles.locationChipText}>+{friend.completedLocations.length - 4} more</Text>
+              </View>
+            )}
+          </View>
+
+          <TouchableOpacity
+            style={[modalStyles.closeBtn, { backgroundColor: friend.color }]}
+            onPress={onClose}
+          >
+            <Text style={modalStyles.closeBtnText}>Close</Text>
+          </TouchableOpacity>
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
+// ── Pin detail modal ──────────────────────────────────────────────────────────
+
+function PinModal({ pin, onClose }: { pin: Pin | null; onClose: () => void }) {
+  if (!pin) return null;
+  const typeLabel = { food: 'FOOD TRAIL', time: 'TIME TRAVELLING', art: 'RECREATE THE ART', maker: 'MEET THE MAKER' }[pin.type];
+  const color = PIN_COLORS[pin.type];
+  const friendsHere = FRIENDS.filter(f => Math.abs(f.mapX - pin.x) < 0.15 && Math.abs(f.mapY - pin.y) < 0.2);
+  return (
+    <Modal visible={!!pin} transparent animationType="fade" onRequestClose={onClose}>
+      <Pressable style={modalStyles.backdrop} onPress={onClose}>
+        <Pressable style={[modalStyles.sheet, { paddingTop: 0 }]} onPress={e => e.stopPropagation()}>
+          <View style={[modalStyles.pinHeader, { backgroundColor: color }]}>
+            <Text style={modalStyles.pinEmojiBig}>{pin.emoji}</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={modalStyles.pinType}>{typeLabel}</Text>
+              <Text style={modalStyles.pinName}>{pin.label}</Text>
+            </View>
+            {pin.done && <View style={modalStyles.doneBadge}><Text style={modalStyles.doneText}>✓ Done</Text></View>}
+          </View>
+
+          {friendsHere.length > 0 && (
+            <View style={modalStyles.friendsHereSection}>
+              <Text style={[modalStyles.secLabel, { marginBottom: 8 }]}>👥 FRIENDS NEARBY</Text>
+              {friendsHere.map(f => (
+                <View key={f.id} style={modalStyles.friendHereRow}>
+                  <View style={[modalStyles.friendDot, { backgroundColor: f.color }]} />
+                  <Text style={modalStyles.friendHereName}>{f.name}</Text>
+                  <Text style={modalStyles.friendHereLast}>{f.lastSeen}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          <View style={modalStyles.heatRow}>
+            <Text style={[modalStyles.heatLabel, { color }]}>🔥 Activity today: </Text>
+            <Text style={modalStyles.heatValue}>
+              {pin.id === 'swee' ? '12 players' : pin.id === 'stadium' ? '7 players' : pin.id === 'fcmural' ? '5 players' : '3 players'}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            style={[modalStyles.closeBtn, { backgroundColor: color, marginTop: 12 }]}
+            onPress={onClose}
+          >
+            <Text style={modalStyles.closeBtnText}>Got it</Text>
+          </TouchableOpacity>
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
+// ── Main screen ───────────────────────────────────────────────────────────────
+
+export default function SocialMeadowScreen() {
+  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
+  const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
+
+  return (
+    <ImageBackground source={meadow} style={{ flex: 1 }} resizeMode="cover">
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        {/* Profile chip */}
+        <View style={styles.topRow}>
+          <View style={styles.profileChip}>
+            <Text style={styles.profileName}>{PLAYER.name}</Text>
+            <View style={styles.avatarCircle}><Text style={{ fontSize: 16 }}>👤</Text></View>
           </View>
         </View>
 
-        {/* Fun fact */}
-        <View style={styles.funFactCard}>
-          <Text style={styles.funFactLabel}>💡 DID YOU KNOW?</Text>
-          <Text style={styles.funFactText}>
-            "Jalan Besar" literally means "Big Road" in Malay — a fitting name for one of Singapore's oldest and most historically layered districts. At its peak in the 1960s, the area was home to over 200 small businesses operating from the ground floors of shophouses, from tinsmiths and rattan weavers to provision shops and fortune tellers.
-          </Text>
+        {/* Page title */}
+        <View style={styles.pageTitle}>
+          <Text style={styles.pageTitleShadow}>SOCIAL MEADOW</Text>
+          <Text style={styles.pageTitleText}>SOCIAL MEADOW</Text>
         </View>
 
-        <View style={{ height: 20 }} />
-      </ScrollView>
-      </View>
-    </SafeAreaView>
+        {/* Card panel */}
+        <View style={styles.cardPanel}>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+
+            {/* Map section */}
+            <Text style={styles.sectionLabel}>🗺️ JALAN BESAR — LIVE MAP</Text>
+            <View style={styles.mapCard}>
+              <JalanBesarMap
+                onFriendPress={setSelectedFriend}
+                onPinPress={setSelectedPin}
+              />
+              {/* Map legend */}
+              <View style={styles.legend}>
+                {[
+                  { color: '#BA7517', label: 'Food' },
+                  { color: '#185FA5', label: 'History' },
+                  { color: '#534AB7', label: 'Art' },
+                  { color: '#0F6E56', label: 'Maker' },
+                ].map(l => (
+                  <View key={l.label} style={styles.legendItem}>
+                    <View style={[styles.legendDot, { backgroundColor: l.color }]} />
+                    <Text style={styles.legendText}>{l.label}</Text>
+                  </View>
+                ))}
+                <View style={styles.legendItem}>
+                  <View style={[styles.legendDot, { backgroundColor: '#D4708A' }]} />
+                  <Text style={styles.legendText}>Friends</Text>
+                </View>
+              </View>
+              <Text style={styles.mapHint}>Tap any marker or pin to see details</Text>
+            </View>
+
+            {/* Online friends strip */}
+            <Text style={styles.sectionLabel}>👥 FRIENDS ({FRIENDS.filter(f => f.isOnline).length} online)</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.friendsScroll}>
+              {FRIENDS.map(f => (
+                <TouchableOpacity
+                  key={f.id}
+                  style={[styles.friendCard, { borderColor: f.color }]}
+                  onPress={() => setSelectedFriend(f)}
+                  activeOpacity={0.85}
+                >
+                  <View style={styles.friendAvatarWrap}>
+                    <MochiCharacter accessory={f.accessory} size={56} />
+                    <View style={[styles.statusDot, { backgroundColor: f.isOnline ? '#22c55e' : '#888' }]} />
+                  </View>
+                  <Text style={[styles.friendName, { color: f.darkColor }]}>{f.name}</Text>
+                  <View style={[styles.friendLvBadge, { backgroundColor: f.color }]}>
+                    <Text style={styles.friendLvText}>LV {f.level}</Text>
+                  </View>
+                  <Text style={styles.friendLastSeen}>{f.lastSeen}</Text>
+                  <View style={styles.friendProgressRow}>
+                    <Text style={styles.friendProgressText}>🍜{f.stallsDone} 📸{f.landmarksDone} 🎨{f.muralsDone} 🔧{f.shopsDone}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            {/* Group challenge */}
+            <Text style={styles.sectionLabel}>⚡ GROUP CHALLENGE</Text>
+            <View style={styles.challengeCard}>
+              <View style={styles.challengeHeader}>
+                <Text style={styles.challengeTitle}>{GROUP_CHALLENGE.title}</Text>
+                <View style={styles.deadlinePill}>
+                  <Text style={styles.deadlineText}>{GROUP_CHALLENGE.deadline}</Text>
+                </View>
+              </View>
+              <Text style={styles.challengeDesc}>{GROUP_CHALLENGE.desc}</Text>
+              <View style={styles.challengeMembersRow}>
+                {GROUP_CHALLENGE.members.map(m => (
+                  <View key={m.name} style={styles.challengeMember}>
+                    <View style={[styles.challengeMemberDot, { backgroundColor: m.done ? '#22c55e' : '#ddd' }]}>
+                      <Text style={styles.challengeMemberCheck}>{m.done ? '✓' : '○'}</Text>
+                    </View>
+                    <Text style={[styles.challengeMemberName, { color: m.done ? '#22c55e' : '#888' }]}>{m.name}</Text>
+                  </View>
+                ))}
+              </View>
+              <View style={styles.challengeRewardRow}>
+                <Text style={styles.challengeRewardLabel}>🏆 REWARD</Text>
+                <Text style={styles.challengeRewardText}>{GROUP_CHALLENGE.reward}</Text>
+              </View>
+              <Text style={styles.challengeProgress}>3/5 members done — almost there!</Text>
+            </View>
+
+            {/* Weekly leaderboard */}
+            <Text style={styles.sectionLabel}>🏆 WEEKLY LEADERBOARD</Text>
+            <View style={styles.leaderboardCard}>
+              <Text style={styles.leaderboardPeriod}>Week of 14–20 July 2026</Text>
+              {LEADERBOARD.map((entry, i) => (
+                <View
+                  key={entry.name}
+                  style={[
+                    styles.leaderboardRow,
+                    entry.name === 'Matthew' && styles.leaderboardRowSelf,
+                    i < LEADERBOARD.length - 1 && styles.leaderboardRowBorder,
+                  ]}
+                >
+                  <Text style={styles.rankMedal}>{RANK_MEDALS[i]}</Text>
+                  <View style={[styles.leaderboardDot, { backgroundColor: entry.color }]} />
+                  <Text style={[styles.leaderboardName, entry.name === 'Matthew' && { fontWeight: '900', color: '#3A2008' }]}>
+                    {entry.name}{entry.name === 'Matthew' ? ' (you)' : ''}
+                  </Text>
+                  <View style={styles.leaderboardRight}>
+                    <Text style={[styles.leaderboardXP, { color: entry.color }]}>{entry.weeklyXP} XP</Text>
+                    <Text style={styles.leaderboardLv}>LV {entry.level}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+
+            {/* Discovery heat-map blurb */}
+            <Text style={styles.sectionLabel}>🔥 HOT SPOTS THIS WEEK</Text>
+            <View style={styles.heatCard}>
+              {[
+                { name: 'Swee Choon Dim Sum', count: 12, type: 'food', bar: 0.9 },
+                { name: 'Jalan Besar Stadium', count: 7, type: 'time', bar: 0.58 },
+                { name: 'FC Mural — Tyrwhitt Rd', count: 5, type: 'art', bar: 0.42 },
+                { name: 'Rad Son Lighting', count: 4, type: 'maker', bar: 0.33 },
+                { name: 'Petain Road Shophouses', count: 3, type: 'time', bar: 0.25 },
+              ].map(spot => (
+                <View key={spot.name} style={styles.heatRow}>
+                  <Text style={styles.heatEmoji}>
+                    {spot.type === 'food' ? '🍜' : spot.type === 'time' ? '📸' : spot.type === 'art' ? '🎨' : '🔧'}
+                  </Text>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.heatBarRow}>
+                      <Text style={styles.heatName}>{spot.name}</Text>
+                      <Text style={[styles.heatCount, { color: PIN_COLORS[spot.type as Pin['type']] }]}>{spot.count} players</Text>
+                    </View>
+                    <View style={styles.heatBarBg}>
+                      <View style={[styles.heatBarFill, {
+                        width: `${spot.bar * 100}%` as any,
+                        backgroundColor: PIN_COLORS[spot.type as Pin['type']],
+                      }]} />
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </View>
+
+            <View style={{ height: 20 }} />
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+
+      {/* Modals */}
+      <FriendModal friend={selectedFriend} onClose={() => setSelectedFriend(null)} />
+      <PinModal pin={selectedPin} onClose={() => setSelectedPin(null)} />
     </ImageBackground>
   );
 }
 
+// ── Styles ────────────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 16 },
-
   topRow: { alignItems: 'flex-end', paddingHorizontal: 16, paddingTop: 8 },
   profileChip: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
@@ -229,134 +600,311 @@ const styles = StyleSheet.create({
     borderTopWidth: 3, borderLeftWidth: 2, borderRightWidth: 2,
     borderColor: '#C9A878',
   },
+  content: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 },
 
-  header: { marginBottom: 18, paddingTop: 8 },
-  headerSub: { fontSize: 10, color: colors.lpink, letterSpacing: 2, fontWeight: '700' },
-  headerTitle: { fontSize: 26, color: '#3A2008', fontWeight: '800', letterSpacing: -0.5 },
+  sectionLabel: { fontSize: 11, color: '#E8721A', fontWeight: '800', letterSpacing: 1.5, marginBottom: 10 },
 
-  // Overview
-  overviewCard: {
-    backgroundColor: 'rgba(255,255,255,0.88)',
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 24,
-    borderWidth: 3,
-    borderColor: '#6B4020',
-    borderBottomWidth: 6,
-  },
-  overviewLabel: { fontSize: 10, color: colors.lpink, letterSpacing: 2, fontWeight: '700', marginBottom: 10 },
-  overviewText: { fontSize: 13, color: colors.text, lineHeight: 21, opacity: 0.9 },
-
-  // Section
-  section: { marginBottom: 24 },
-  sectionLabel: { fontSize: 11, color: colors.lpink, letterSpacing: 2, fontWeight: '700', marginBottom: 6 },
-  sectionHint: { fontSize: 11, color: colors.lgrey, fontStyle: 'italic', marginBottom: 14 },
-
-  // Timeline
-  timelineCard: {
-    backgroundColor: 'rgba(255,255,255,0.88)',
-    borderRadius: 18,
-    padding: 16,
-    borderWidth: 3,
-    borderColor: '#6B4020',
-    borderBottomWidth: 6,
-    marginTop: 10,
-  },
-  timelineRow: { flexDirection: 'row', gap: 14, marginBottom: 0 },
-  timelineLeft: { width: 56, alignItems: 'center' },
-  timelineYear: {
-    fontSize: 10,
-    color: colors.pink,
-    fontWeight: '800',
-    textAlign: 'center',
-    paddingTop: 2,
-    lineHeight: 14,
-  },
-  timelineLine: {
-    width: 2,
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.12)',
-    marginTop: 4,
-    marginBottom: 4,
-    minHeight: 16,
-    alignSelf: 'center',
-  },
-  timelineEvent: {
-    flex: 1,
-    fontSize: 12,
-    color: colors.text,
-    lineHeight: 18,
-    opacity: 0.85,
-    paddingVertical: 2,
-    paddingBottom: 14,
-  },
-
-  // Accordion
-  accordionList: { gap: 10 },
-  accordionItem: {
-    backgroundColor: 'rgba(255,255,255,0.88)',
-    borderRadius: 18,
-    borderWidth: 3,
+  // Map
+  mapCard: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginBottom: 20,
+    borderWidth: 2,
     borderColor: '#C9A878',
     borderBottomWidth: 5,
-    overflow: 'hidden',
   },
-  accordionItemOpen: {
-    borderColor: '#6B4020',
-    borderBottomWidth: 6,
-  },
-  accordionHeader: {
+  legend: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 14,
-    gap: 10,
-  },
-  accordionHeaderLeft: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, flex: 1 },
-  accordionEmoji: { fontSize: 26, marginTop: 1 },
-  accordionName: { fontSize: 14, color: colors.text, fontWeight: '800', lineHeight: 19 },
-  accordionPeriod: { fontSize: 10, color: colors.lgrey, fontWeight: '600', marginTop: 2 },
-  accordionChevron: {
-    fontSize: 24,
-    color: colors.lpink,
-    fontWeight: '700',
-    transform: [{ rotate: '0deg' }],
-  },
-  accordionChevronOpen: {
-    transform: [{ rotate: '90deg' }],
-    color: colors.pink,
-  },
-  accordionTeaser: {
-    fontSize: 12,
-    color: colors.lgrey,
-    paddingHorizontal: 16,
-    paddingBottom: 14,
-    lineHeight: 17,
-    fontStyle: 'italic',
-  },
-  accordionBody: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 12,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.08)',
-    paddingTop: 12,
+    flexWrap: 'wrap',
   },
-  accordionBodyText: {
-    fontSize: 13,
-    color: colors.text,
-    lineHeight: 21,
-    opacity: 0.88,
-  },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  legendDot: { width: 10, height: 10, borderRadius: 5 },
+  legendText: { fontSize: 10, color: '#6B4020', fontWeight: '600' },
+  mapHint: { fontSize: 10, color: '#888', textAlign: 'center', paddingBottom: 8 },
 
-  // Fun fact
-  funFactCard: {
-    backgroundColor: colors.amber.bg,
+  // Friends strip
+  friendsScroll: { marginBottom: 20 },
+  friendCard: {
+    width: 100,
+    backgroundColor: '#FFFEF8',
+    borderRadius: 16,
+    padding: 10,
+    alignItems: 'center',
+    marginRight: 10,
+    borderWidth: 2,
+    borderBottomWidth: 5,
+    gap: 3,
+  },
+  friendAvatarWrap: { position: 'relative' },
+  statusDot: { position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, borderRadius: 5, borderWidth: 2, borderColor: '#fff' },
+  friendName: { fontSize: 12, fontWeight: '800' },
+  friendLvBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 2 },
+  friendLvText: { fontSize: 10, color: '#fff', fontWeight: '800' },
+  friendLastSeen: { fontSize: 9, color: '#888' },
+  friendProgressRow: {},
+  friendProgressText: { fontSize: 9, color: '#6B4020', fontWeight: '600' },
+
+  // Challenge
+  challengeCard: {
+    backgroundColor: '#FFF9EE',
     borderRadius: 18,
     padding: 16,
-    borderWidth: 3,
-    borderColor: colors.amber.light,
+    marginBottom: 20,
+    borderWidth: 2.5,
+    borderColor: '#E8721A',
     borderBottomWidth: 6,
   },
-  funFactLabel: { fontSize: 10, color: colors.amber.dark, letterSpacing: 1.5, fontWeight: '700', marginBottom: 10 },
-  funFactText: { fontSize: 13, color: colors.amber.dark, lineHeight: 20, opacity: 0.9 },
+  challengeHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 },
+  challengeTitle: { fontSize: 15, fontWeight: '900', color: '#3A2008' },
+  deadlinePill: { backgroundColor: '#FDDBB4', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
+  deadlineText: { fontSize: 9, color: '#8B4513', fontWeight: '700' },
+  challengeDesc: { fontSize: 12, color: '#6B4020', lineHeight: 17, marginBottom: 12 },
+  challengeMembersRow: { flexDirection: 'row', gap: 12, marginBottom: 12, flexWrap: 'wrap' },
+  challengeMember: { alignItems: 'center', gap: 4 },
+  challengeMemberDot: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
+  challengeMemberCheck: { color: '#fff', fontSize: 14, fontWeight: '900' },
+  challengeMemberName: { fontSize: 9, fontWeight: '700' },
+  challengeRewardRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
+  challengeRewardLabel: { fontSize: 9, color: '#888', fontWeight: '700', letterSpacing: 1 },
+  challengeRewardText: { fontSize: 12, color: '#3A2008', fontWeight: '700', flex: 1 },
+  challengeProgress: { fontSize: 11, color: '#E8721A', fontWeight: '700' },
+
+  // Leaderboard
+  leaderboardCard: {
+    backgroundColor: '#FFFEF8',
+    borderRadius: 18,
+    padding: 14,
+    marginBottom: 20,
+    borderWidth: 2.5,
+    borderColor: '#C9A878',
+    borderBottomWidth: 6,
+  },
+  leaderboardPeriod: { fontSize: 10, color: '#888', marginBottom: 12, textAlign: 'center' },
+  leaderboardRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, gap: 10 },
+  leaderboardRowSelf: { backgroundColor: 'rgba(232,114,26,0.08)', borderRadius: 10, paddingHorizontal: 6, marginHorizontal: -6 },
+  leaderboardRowBorder: { borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.07)' },
+  rankMedal: { fontSize: 18, width: 28, textAlign: 'center' },
+  leaderboardDot: { width: 12, height: 12, borderRadius: 6 },
+  leaderboardName: { flex: 1, fontSize: 14, fontWeight: '700', color: '#6B4020' },
+  leaderboardRight: { alignItems: 'flex-end' },
+  leaderboardXP: { fontSize: 13, fontWeight: '900' },
+  leaderboardLv: { fontSize: 10, color: '#888' },
+
+  // Heat map
+  heatCard: {
+    backgroundColor: '#FFFEF8',
+    borderRadius: 18,
+    padding: 14,
+    borderWidth: 2,
+    borderColor: '#C9A878',
+    borderBottomWidth: 5,
+    gap: 14,
+  },
+  heatRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  heatEmoji: { fontSize: 20, width: 26, textAlign: 'center' },
+  heatBarRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
+  heatName: { fontSize: 12, fontWeight: '700', color: '#3A2008', flex: 1 },
+  heatCount: { fontSize: 11, fontWeight: '800' },
+  heatBarBg: { height: 6, backgroundColor: 'rgba(0,0,0,0.08)', borderRadius: 3, overflow: 'hidden' },
+  heatBarFill: { height: '100%', borderRadius: 3 },
+});
+
+// ── Map styles ────────────────────────────────────────────────────────────────
+
+const mapStyles = StyleSheet.create({
+  container: {
+    width: MAP_W,
+    height: MAP_H,
+    backgroundColor: '#1B3A4B',
+    alignSelf: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  road: {
+    position: 'absolute',
+    backgroundColor: 'rgba(255,255,255,0.18)',
+  },
+  roadLabel: {
+    position: 'absolute',
+    fontSize: 7,
+    color: 'rgba(255,255,255,0.4)',
+    fontWeight: '600',
+  },
+  landmark: {
+    position: 'absolute',
+    borderRadius: 4,
+  },
+  landmarkLabel: {
+    position: 'absolute',
+    fontSize: 7,
+    color: 'rgba(255,255,255,0.5)',
+  },
+  pin: {
+    position: 'absolute',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+  },
+  pinEmoji: { fontSize: 11 },
+  selfMarker: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#D4708A',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+  },
+  friendMarker: {
+    position: 'absolute',
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.8)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+  },
+  onlineDot: {
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#22c55e',
+    borderWidth: 1.5,
+    borderColor: '#fff',
+  },
+  markerLabel: {
+    position: 'absolute',
+    fontSize: 8,
+    fontWeight: '800',
+    textAlign: 'center',
+    width: 36,
+  },
+});
+
+// ── Modal styles ──────────────────────────────────────────────────────────────
+
+const modalStyles = StyleSheet.create({
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    justifyContent: 'flex-end',
+  },
+  sheet: {
+    backgroundColor: '#FFFEF8',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingBottom: 28,
+    overflow: 'hidden',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    gap: 14,
+  },
+  onlineRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
+  onlineBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 2 },
+  onlineText: { fontSize: 9, color: '#fff', fontWeight: '800', letterSpacing: 0.5 },
+  lastSeen: { fontSize: 10, color: 'rgba(255,255,255,0.75)' },
+  friendName: { fontSize: 22, fontWeight: '900', color: '#fff' },
+  friendLevel: { fontSize: 13, color: 'rgba(255,255,255,0.85)', fontWeight: '600' },
+
+  statsRow: {
+    flexDirection: 'row',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.07)',
+  },
+  statCell: { flex: 1, alignItems: 'center' },
+  statNum: { fontSize: 18, fontWeight: '900' },
+  statLbl: { fontSize: 10, color: '#888', marginTop: 2 },
+
+  secLabel: {
+    fontSize: 10,
+    color: '#888',
+    fontWeight: '700',
+    letterSpacing: 1.5,
+    paddingHorizontal: 20,
+    marginTop: 14,
+    marginBottom: 4,
+  },
+  locationList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    paddingHorizontal: 20,
+    marginBottom: 16,
+  },
+  locationChip: {
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1.5,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+  },
+  locationChipText: { fontSize: 11, fontWeight: '700', color: '#3A2008' },
+
+  closeBtn: {
+    marginHorizontal: 20,
+    borderRadius: 16,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(0,0,0,0.15)',
+  },
+  closeBtnText: { color: '#fff', fontWeight: '900', fontSize: 15 },
+
+  // Pin modal
+  pinHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    gap: 12,
+  },
+  pinEmojiBig: { fontSize: 34 },
+  pinType: { fontSize: 9, color: 'rgba(255,255,255,0.8)', fontWeight: '700', letterSpacing: 1.5 },
+  pinName: { fontSize: 17, fontWeight: '900', color: '#fff', lineHeight: 21 },
+  doneBadge: {
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  doneText: { fontSize: 11, color: '#fff', fontWeight: '800' },
+
+  friendsHereSection: { paddingHorizontal: 20, marginBottom: 4 },
+  friendHereRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 6 },
+  friendDot: { width: 10, height: 10, borderRadius: 5 },
+  friendHereName: { flex: 1, fontSize: 13, fontWeight: '700', color: '#3A2008' },
+  friendHereLast: { fontSize: 11, color: '#888' },
+
+  heatLabel: { fontSize: 12, fontWeight: '700', paddingHorizontal: 20, marginTop: 10 },
+  heatValue: { fontSize: 13, fontWeight: '900', color: '#3A2008', paddingHorizontal: 20 },
 });
