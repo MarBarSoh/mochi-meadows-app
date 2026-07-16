@@ -78,14 +78,12 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 24 : 10,
     paddingTop: 10,
   },
-  centerTabItem: {
-    marginTop: -10,
-  },
+  centerTabItem: {},
   centerIconWrapper: {
     backgroundColor: 'rgba(233,204,116,0.35)',
-    borderRadius: 30,
-    width: 60,
-    height: 52,
+    borderRadius: 26,
+    width: 56,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,

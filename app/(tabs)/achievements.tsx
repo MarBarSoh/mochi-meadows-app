@@ -98,7 +98,7 @@ export default function AchievementsScreen() {
           <View style={[styles.trailCard, { borderColor: colors.amber.light, backgroundColor: colors.amber.bg }]}>
             <View style={styles.trailRewardRow}>
               <Text style={styles.trailRewardEmoji}>🍞</Text>
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={[styles.trailRewardLabel, { color: colors.amber.dark }]}>FINAL REWARD</Text>
                 <Text style={[styles.trailRewardValue, { color: colors.amber.mid }]}>Kaya Toast Hat + Ice Kachang Headband</Text>
               </View>
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   trailRewardRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 },
   trailRewardEmoji: { fontSize: 28 },
   trailRewardLabel: { fontSize: 9, fontWeight: '700', letterSpacing: 1, opacity: 0.7 },
-  trailRewardValue: { fontSize: 15, fontWeight: '800' },
+  trailRewardValue: { fontSize: 13, fontWeight: '800', flexWrap: 'wrap' },
   trailProgress: { marginLeft: 'auto' },
   trailProgressNum: { fontSize: 18, fontWeight: '800' },
 
