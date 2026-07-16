@@ -905,6 +905,7 @@ const modalStyles = StyleSheet.create({
   friendHereName: { flex: 1, fontSize: 13, fontWeight: '700', color: '#3A2008' },
   friendHereLast: { fontSize: 11, color: '#888' },
 
-  heatLabel: { fontSize: 12, fontWeight: '700', paddingHorizontal: 20, marginTop: 10 },
-  heatValue: { fontSize: 13, fontWeight: '900', color: '#3A2008', paddingHorizontal: 20 },
+  heatRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 20, marginTop: 10 },
+  heatLabel: { fontSize: 12, fontWeight: '700' },
+  heatValue: { fontSize: 13, fontWeight: '900', color: '#3A2008' },
 });

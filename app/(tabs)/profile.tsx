@@ -24,9 +24,35 @@ const LEVEL_TITLE: Record<number, string> = {
   3: 'Street Artist',
   4: 'Skilled Maker',
   5: 'Heritage Foodie',
+  6: 'Master Craftsman',
+  7: 'Rattan Weaver',
+  8: 'Heritage Master',
 };
 
-const CURRENT_ACCESSORIES: AccessoryId[] = ['bow', 'cap', 'beret', 'hardhat'];
+type AccessoryMeta = {
+  id: AccessoryId;
+  label: string;
+  emoji: string;
+  unlockLevel: number;
+  category: string;
+};
+
+const ALL_ACCESSORIES: AccessoryMeta[] = [
+  { id: 'none',        label: 'Plain Mochi',      emoji: '🌟', unlockLevel: 1, category: 'Base' },
+  { id: 'bow',         label: 'Pink Bow',          emoji: '🎀', unlockLevel: 1, category: 'Hair' },
+  { id: 'cap',         label: 'Kapitan Cap',       emoji: '🧢', unlockLevel: 2, category: 'Hat' },
+  { id: 'beret',       label: 'Artist Beret',      emoji: '🎓', unlockLevel: 3, category: 'Hat' },
+  { id: 'hardhat',     label: 'Hardhat',           emoji: '⛑️', unlockLevel: 4, category: 'Hat' },
+  { id: 'jade',        label: 'Jade Necklace',     emoji: '💚', unlockLevel: 5, category: 'Jewellery' },
+  { id: 'toast',       label: 'Toast Hat',         emoji: '🍞', unlockLevel: 5, category: 'Hat' },
+  { id: 'kebaya',      label: 'Kebaya Collar',     emoji: '👘', unlockLevel: 6, category: 'Outfit' },
+  { id: 'kerosang',    label: 'Nonya Brooch',      emoji: '📿', unlockLevel: 6, category: 'Jewellery' },
+  { id: 'toolbelt',    label: 'Toolbelt',          emoji: '🔧', unlockLevel: 6, category: 'Belt' },
+  { id: 'bag',         label: 'Rattan Bag',        emoji: '👜', unlockLevel: 7, category: 'Item' },
+  { id: 'sarong',      label: 'Batik Sarong',      emoji: '🧵', unlockLevel: 7, category: 'Outfit' },
+  { id: 'gold_bangle', label: 'Gold Bangles',      emoji: '💛', unlockLevel: 8, category: 'Jewellery' },
+  { id: 'lantern',     label: 'Heritage Lantern',  emoji: '🏮', unlockLevel: 8, category: 'Item' },
+];
 
 function AccessorySlot({ emoji, label, unlocked }: { emoji: string; label: string; unlocked: boolean }) {
   return (
@@ -37,6 +63,43 @@ function AccessorySlot({ emoji, label, unlocked }: { emoji: string; label: strin
   );
 }
 
+function AccessoryTile({
+  item,
+  isActive,
+  isUnlocked,
+  onPress,
+}: {
+  item: AccessoryMeta;
+  isActive: boolean;
+  isUnlocked: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      style={[styles.accTile, isActive && styles.accTileActive, !isUnlocked && styles.accTileLocked]}
+      onPress={isUnlocked ? onPress : undefined}
+      activeOpacity={isUnlocked ? 0.7 : 1}
+    >
+      {isUnlocked ? (
+        <MochiCharacter accessory={item.id} size={52} />
+      ) : (
+        <View style={styles.accTileLockedBody}>
+          <Text style={styles.accTileEmoji}>{item.emoji}</Text>
+          <Text style={styles.accTileLockIcon}>🔒</Text>
+        </View>
+      )}
+      <Text style={[styles.accTileLabel, !isUnlocked && styles.accTileLabelLocked]} numberOfLines={1}>
+        {item.label}
+      </Text>
+      {!isUnlocked && (
+        <View style={styles.unlockBadge}>
+          <Text style={styles.unlockBadgeText}>LV {item.unlockLevel}</Text>
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+}
+
 export default function ProfileScreen() {
   const [activeAccessory, setActiveAccessory] = useState<AccessoryId>('beret');
   const xpProgress = PLAYER.xpProgress;
@@ -44,24 +107,20 @@ export default function ProfileScreen() {
   return (
     <ImageBackground source={meadow} style={styles.bg} resizeMode="cover">
       <SafeAreaView style={styles.safe} edges={['top']}>
-        {/* Top-right profile chip */}
         <View style={styles.topRow}>
           <ProfileChip />
         </View>
 
-        {/* Mochi character from Figma asset */}
         <View style={styles.mochiArea}>
           <Image source={mochiImg} style={styles.mochiImg} resizeMode="contain" />
           <View style={styles.shadowOval} />
         </View>
 
-        {/* NYOM name with orange stroke effect */}
         <View style={styles.nameRow}>
           <Text style={styles.nameShadow}>NYOM</Text>
           <Text style={styles.name}>NYOM</Text>
         </View>
 
-        {/* Sliding card panel for equipment + stats */}
         <View style={styles.cardPanel}>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.cardContent}>
             {/* Level badge + XP bar */}
@@ -78,7 +137,7 @@ export default function ProfileScreen() {
               </View>
             </View>
 
-            {/* Cross accessory layout */}
+            {/* Cross equipment layout */}
             <Text style={styles.sectionLabel}>⚔️ EQUIPMENT</Text>
             <View style={styles.crossLayout}>
               <View style={styles.crossRow}>
@@ -100,17 +159,17 @@ export default function ProfileScreen() {
               </View>
             </View>
 
-            {/* Accessories picker */}
-            <Text style={styles.sectionLabel}>🎀 MY ACCESSORIES</Text>
-            <View style={styles.accessoriesRow}>
-              {CURRENT_ACCESSORIES.map(acc => (
-                <TouchableOpacity
-                  key={acc}
-                  style={[styles.accBtn, activeAccessory === acc && styles.accBtnActive]}
-                  onPress={() => setActiveAccessory(acc)}
-                >
-                  <MochiCharacter accessory={acc} size={48} />
-                </TouchableOpacity>
+            {/* Full accessories collection */}
+            <Text style={styles.sectionLabel}>🎀 MY COLLECTION</Text>
+            <View style={styles.accGrid}>
+              {ALL_ACCESSORIES.map(item => (
+                <AccessoryTile
+                  key={item.id}
+                  item={item}
+                  isActive={activeAccessory === item.id}
+                  isUnlocked={item.unlockLevel <= PLAYER.level}
+                  onPress={() => setActiveAccessory(item.id)}
+                />
               ))}
             </View>
 
@@ -302,27 +361,66 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  accessoriesRow: {
+  // Full accessories grid
+  accGrid: {
     flexDirection: 'row',
-    gap: 10,
     flexWrap: 'wrap',
-    marginBottom: 20,
+    gap: 8,
+    marginBottom: 22,
   },
-  accBtn: {
-    width: 68,
-    height: 68,
+  accTile: {
+    width: 78,
     borderRadius: 14,
     backgroundColor: '#FFF5E0',
     borderWidth: 2,
     borderColor: '#C9A878',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 6,
+    paddingBottom: 8,
+    paddingHorizontal: 4,
+    position: 'relative',
   },
-  accBtnActive: {
+  accTileActive: {
     borderColor: '#E8721A',
     borderWidth: 3,
     backgroundColor: '#FFF3E8',
+    shadowColor: '#E8721A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
+  accTileLocked: {
+    backgroundColor: 'rgba(240,234,224,0.7)',
+    borderColor: 'rgba(0,0,0,0.1)',
+    opacity: 0.75,
+  },
+  accTileLockedBody: {
+    width: 52,
+    height: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  accTileEmoji: { fontSize: 26 },
+  accTileLockIcon: { fontSize: 14, marginTop: -4 },
+  accTileLabel: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#6B4020',
+    textAlign: 'center',
+    marginTop: 4,
+    letterSpacing: 0.2,
+  },
+  accTileLabelLocked: { color: '#aaa' },
+  unlockBadge: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    backgroundColor: '#3A2008',
+    borderRadius: 6,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  unlockBadgeText: { fontSize: 8, color: '#FFD080', fontWeight: '800', letterSpacing: 0.3 },
 
   statsGrid: {
     flexDirection: 'row',
