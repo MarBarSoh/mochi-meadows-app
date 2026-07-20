@@ -30,6 +30,8 @@ const ALL_ACCESSORIES: AccessoryMeta[] = [
   { id: 'hardhat',     label: 'Hardhat',              emoji: '⛑️', unlockLevel: 4, slot: 'hat' },
   { id: 'toast',       label: 'Toast Hat',            emoji: '🍞', unlockLevel: 5, slot: 'hat' },
   // Accessories slot
+  { id: 'pearl_necklace', label: 'Pearl Necklace',    emoji: '📿', unlockLevel: 2, slot: 'accessories' },
+  { id: 'lucky_string',   label: 'Lucky Red String',  emoji: '🧧', unlockLevel: 3, slot: 'accessories' },
   { id: 'hairpin',     label: 'Flower Hairpin',       emoji: '🌸', unlockLevel: 4, slot: 'accessories' },
   { id: 'jade',        label: 'Jade Necklace',        emoji: '💚', unlockLevel: 5, slot: 'accessories' },
   { id: 'bracelet',    label: 'Jade Bracelet',        emoji: '💎', unlockLevel: 5, slot: 'accessories' },
@@ -39,6 +41,9 @@ const ALL_ACCESSORIES: AccessoryMeta[] = [
   { id: 'gold_bangle', label: 'Gold Bangles',         emoji: '💛', unlockLevel: 8, slot: 'accessories' },
   { id: 'lantern',     label: 'Heritage Lantern',     emoji: '🏮', unlockLevel: 8, slot: 'accessories' },
   // Clothing slot
+  { id: 'tang_suit',      label: 'Tang Suit',         emoji: '🥻', unlockLevel: 2, slot: 'clothing' },
+  { id: 'striped_shirt',  label: 'Striped Shirt',     emoji: '👕', unlockLevel: 3, slot: 'clothing' },
+  { id: 'school_uniform', label: 'School Uniform',    emoji: '🎽', unlockLevel: 3, slot: 'clothing' },
   { id: 'batik_shirt', label: 'Batik Shirt',          emoji: '👕', unlockLevel: 4, slot: 'clothing' },
   { id: 'kebaya',      label: 'Peranakan Kebaya',     emoji: '👘', unlockLevel: 6, slot: 'clothing' },
   { id: 'sarong',      label: 'Batik Sarong',         emoji: '🧵', unlockLevel: 7, slot: 'clothing' },

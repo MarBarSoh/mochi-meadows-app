@@ -16,6 +16,8 @@ export type AccessoryId =
   | 'hardhat'
   | 'toast'
   // accessories
+  | 'pearl_necklace'
+  | 'lucky_string'
   | 'hairpin'
   | 'jade'
   | 'bracelet'
@@ -25,6 +27,9 @@ export type AccessoryId =
   | 'gold_bangle'
   | 'lantern'
   // clothing
+  | 'tang_suit'
+  | 'striped_shirt'
+  | 'school_uniform'
   | 'batik_shirt'
   | 'kebaya'
   | 'sarong'
@@ -208,7 +213,86 @@ function LanternAccessory() {
   );
 }
 
+function PearlNecklaceAccessory() {
+  return (
+    <G>
+      <Path d="M 28 84 Q 50 93 72 84" stroke="#D8D0C0" strokeWidth="1" fill="none" />
+      <Circle cx="28" cy="84" r="3" fill="#F8F3EE" stroke="#D4C8B0" strokeWidth="0.5" />
+      <Circle cx="35.5" cy="87.5" r="3" fill="#F5F0EA" stroke="#D4C8B0" strokeWidth="0.5" />
+      <Circle cx="43" cy="90" r="3.2" fill="#F8F3EE" stroke="#D4C8B0" strokeWidth="0.5" />
+      <Circle cx="50" cy="91.5" r="3.5" fill="#F5F0EA" stroke="#D4C8B0" strokeWidth="0.5" />
+      <Circle cx="57" cy="90" r="3.2" fill="#F8F3EE" stroke="#D4C8B0" strokeWidth="0.5" />
+      <Circle cx="64.5" cy="87.5" r="3" fill="#F5F0EA" stroke="#D4C8B0" strokeWidth="0.5" />
+      <Circle cx="72" cy="84" r="3" fill="#F8F3EE" stroke="#D4C8B0" strokeWidth="0.5" />
+      <Circle cx="48.5" cy="90" r="1" fill="white" opacity="0.7" />
+    </G>
+  );
+}
+
+function LuckyStringAccessory() {
+  return (
+    <G>
+      <Ellipse cx="12" cy="58" rx="7" ry="3.5" fill="none" stroke="#CC1111" strokeWidth="3.5" />
+      <Ellipse cx="12" cy="58" rx="7" ry="3.5" fill="none" stroke="#EE3333" strokeWidth="1.5" />
+      <Circle cx="5.5" cy="58" r="4" fill="#C9A800" stroke="#8B7000" strokeWidth="0.8" />
+      <Circle cx="5.5" cy="58" r="2" fill="none" stroke="#8B7000" strokeWidth="0.8" />
+      <Circle cx="4.8" cy="57.2" r="0.8" fill="#F0D060" opacity="0.8" />
+    </G>
+  );
+}
+
 // ── Clothing slot items ───────────────────────────────────────────────────────
+
+function TangSuitAccessory() {
+  return (
+    <G>
+      <Path d="M 16 82 Q 50 92 84 82 L 84 100 L 16 100 Z" fill="#F5EDD5" opacity="0.92" />
+      <Path d="M 38 78 L 38 84 Q 50 88 62 84 L 62 78 Q 50 74 38 78 Z" fill="#EDE0C0" />
+      <Path d="M 38 78 Q 50 74 62 78" stroke="#C9A800" strokeWidth="1" fill="none" />
+      <Path d="M 38 84 Q 50 88 62 84" stroke="#C9A800" strokeWidth="1" fill="none" />
+      <Line x1="50" y1="78" x2="50" y2="100" stroke="#C9A800" strokeWidth="0.8" opacity="0.35" />
+      <Circle cx="50" cy="80" r="2" fill="#C9A800" />
+      <Path d="M 47 80 Q 50 76.5 53 80" stroke="#C9A800" strokeWidth="1.2" fill="none" />
+      <Path d="M 47 80 Q 50 83.5 53 80" stroke="#C9A800" strokeWidth="1.2" fill="none" />
+      <Circle cx="50" cy="86.5" r="1.8" fill="#C9A800" />
+      <Path d="M 48 86.5 Q 50 83.5 52 86.5" stroke="#C9A800" strokeWidth="1" fill="none" />
+      <Path d="M 48 86.5 Q 50 89.5 52 86.5" stroke="#C9A800" strokeWidth="1" fill="none" />
+      <Circle cx="50" cy="92" r="1.5" fill="#C9A800" />
+    </G>
+  );
+}
+
+function StripedShirtAccessory() {
+  return (
+    <G>
+      <Path d="M 16 82 Q 50 92 84 82 L 84 100 L 16 100 Z" fill="#F2F4F8" opacity="0.95" />
+      <Path d="M 16 83.5 Q 50 93.5 84 83.5 L 84 86 Q 50 96 16 86 Z" fill="#1A3A8F" opacity="0.75" />
+      <Path d="M 16 88 Q 50 97.5 84 88 L 84 90.5 Q 50 100 16 90.5 Z" fill="#1A3A8F" opacity="0.75" />
+      <Path d="M 16 92.5 Q 50 100 84 92.5 L 84 95 Q 50 100 16 95 Z" fill="#1A3A8F" opacity="0.75" />
+      <Path d="M 16 97 Q 50 100 84 97 L 84 100 L 16 100 Z" fill="#1A3A8F" opacity="0.75" />
+      <Path d="M 41 78 L 41 84 L 50 87 L 59 84 L 59 78" stroke="#D0D0D0" strokeWidth="1.5" fill="#F2F4F8" />
+      <Line x1="50" y1="78" x2="50" y2="87" stroke="#C8C8C8" strokeWidth="1" />
+    </G>
+  );
+}
+
+function SchoolUniformAccessory() {
+  return (
+    <G>
+      <Path d="M 16 82 Q 50 92 84 82 L 84 100 L 16 100 Z" fill="#F8F8F8" opacity="0.95" />
+      <Path d="M 40 78 L 40 84 L 50 87 L 60 84 L 60 78" stroke="#E0E0E0" strokeWidth="1" fill="#F8F8F8" />
+      <Line x1="50" y1="78" x2="50" y2="87" stroke="#D0D0D0" strokeWidth="1" />
+      <Path d="M 48 79 L 50 78 L 52 79 L 51 90 L 50 92 L 49 90 Z" fill="#1A3A8F" />
+      <Path d="M 47 80 L 53 80 L 51 83.5 L 49 83.5 Z" fill="#142D6F" />
+      <Rect x="24" y="82" width="9" height="9" rx="2" fill="#1A3A8F" />
+      <Circle cx="28.5" cy="86.5" r="3.2" fill="#C9A800" stroke="#8B7000" strokeWidth="0.6" />
+      <Path d="M 26.5 86.5 L 28.5 84.5 L 30.5 86.5 L 28.5 88.5 Z" fill="#1A3A8F" />
+      <Circle cx="50" cy="89.5" r="1.2" fill="#D0D0D0" />
+      <Circle cx="50" cy="93.5" r="1.2" fill="#D0D0D0" />
+      <Circle cx="50" cy="97.5" r="1.2" fill="#D0D0D0" />
+    </G>
+  );
+}
 
 function BatikShirtAccessory() {
   // Colourful batik shirt visible at chest and lower body
@@ -379,6 +463,8 @@ const ACCESSORY_COMPONENTS: Record<AccessoryId, any> = {
   hardhat:     HardhatAccessory,
   toast:       ToastAccessory,
   // accessories
+  pearl_necklace: PearlNecklaceAccessory,
+  lucky_string:   LuckyStringAccessory,
   hairpin:     HairpinAccessory,
   jade:        JadeAccessory,
   bracelet:    BraceletAccessory,
@@ -388,6 +474,9 @@ const ACCESSORY_COMPONENTS: Record<AccessoryId, any> = {
   gold_bangle: GoldBangleAccessory,
   lantern:     LanternAccessory,
   // clothing
+  tang_suit:      TangSuitAccessory,
+  striped_shirt:  StripedShirtAccessory,
+  school_uniform: SchoolUniformAccessory,
   batik_shirt: BatikShirtAccessory,
   kebaya:      KebayaAccessory,
   sarong:      SarongAccessory,
