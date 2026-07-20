@@ -9,21 +9,33 @@ import Svg, {
 
 export type AccessoryId =
   | 'none'
+  // hats
   | 'bow'
   | 'cap'
   | 'beret'
   | 'hardhat'
   | 'toast'
+  // accessories
+  | 'hairpin'
+  | 'jade'
+  | 'bracelet'
+  | 'kerosang'
   | 'toolbelt'
   | 'bag'
+  | 'gold_bangle'
   | 'lantern'
-  | 'jade'
+  // clothing
+  | 'batik_shirt'
   | 'kebaya'
-  | 'kerosang'
   | 'sarong'
-  | 'gold_bangle';
+  | 'changshan'
+  // shoes
+  | 'sneakers'
+  | 'sandals'
+  | 'slippers'
+  | 'wedge_heels';
 
-// ── Accessory SVG overlays ───────────────────────────────────────────────────
+// ── Hat accessories ───────────────────────────────────────────────────────────
 
 function BowAccessory() {
   return (
@@ -79,6 +91,71 @@ function ToastAccessory() {
   );
 }
 
+// ── Accessory slot items ──────────────────────────────────────────────────────
+
+function HairpinAccessory() {
+  // Traditional flower hairpin at top-right of head
+  return (
+    <G>
+      <Line x1="56" y1="26" x2="73" y2="15" stroke="#C9A800" strokeWidth="2.5" strokeLinecap="round" />
+      <Circle cx="53" cy="29" r="4" fill="#FF8CB0" opacity="0.95" />
+      <Circle cx="50" cy="24" r="4" fill="#E8608A" opacity="0.95" />
+      <Circle cx="55" cy="21" r="4" fill="#FF8CB0" opacity="0.95" />
+      <Circle cx="60" cy="24" r="4" fill="#E8608A" opacity="0.95" />
+      <Circle cx="59" cy="29" r="4" fill="#FF8CB0" opacity="0.95" />
+      <Circle cx="55" cy="25" r="3" fill="#FFD700" />
+      <Circle cx="74" cy="15" r="3.5" fill="#C9A800" />
+      <Circle cx="74" cy="15" r="1.8" fill="#FFE566" />
+    </G>
+  );
+}
+
+function JadeAccessory() {
+  return (
+    <G>
+      <Path d="M 28 84 Q 50 93 72 84" stroke="#1A6B3E" strokeWidth="1.2" fill="none" />
+      <Circle cx="28" cy="84" r="3.5" fill="#3DB870" />
+      <Circle cx="36" cy="87.5" r="3.5" fill="#2EAD60" />
+      <Circle cx="44" cy="90" r="3.5" fill="#3DB870" />
+      <Circle cx="50" cy="91.5" r="4.5" fill="#2EAD60" />
+      <Circle cx="56" cy="90" r="3.5" fill="#3DB870" />
+      <Circle cx="64" cy="87.5" r="3.5" fill="#2EAD60" />
+      <Circle cx="72" cy="84" r="3.5" fill="#3DB870" />
+      <Circle cx="50" cy="91.5" r="5.5" fill="none" stroke="#C9A800" strokeWidth="1.5" />
+      <Circle cx="50" cy="91.5" r="2" fill="#F7E690" />
+    </G>
+  );
+}
+
+function BraceletAccessory() {
+  // Jade bracelet on right ear/wrist area
+  return (
+    <G>
+      <Ellipse cx="84" cy="40" rx="10" ry="5.5" fill="none" stroke="#3DB870" strokeWidth="5" />
+      <Ellipse cx="84" cy="40" rx="10" ry="5.5" fill="none" stroke="#2EAD60" strokeWidth="3" />
+      <Path d="M 76 36 Q 80 33 84 36" stroke="#88EEB0" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.85" />
+      <Circle cx="84" cy="35" r="2.2" fill="#C9A800" />
+      <Circle cx="84" cy="45" r="2.2" fill="#C9A800" />
+    </G>
+  );
+}
+
+function KerosangAccessory() {
+  return (
+    <G>
+      <Path d="M 50 77 L 55 83 L 50 89 L 45 83 Z" fill="#C9A800" />
+      <Path d="M 50 77 L 55 83 L 50 89 L 45 83 Z" fill="none" stroke="#8B7000" strokeWidth="0.8" />
+      <Circle cx="50" cy="83" r="2.2" fill="#F0E0B0" />
+      <Circle cx="48.5" cy="81.5" r="0.9" fill="white" opacity="0.85" />
+      <Rect x="49" y="89" width="2" height="3" fill="#B8940A" />
+      <Path d="M 50 92 L 55 97.5 L 50 100 L 45 97.5 Z" fill="#C9A800" />
+      <Path d="M 50 92 L 55 97.5 L 50 100 L 45 97.5 Z" fill="none" stroke="#8B7000" strokeWidth="0.8" />
+      <Circle cx="50" cy="97" r="2" fill="#F0E0B0" />
+      <Circle cx="48.5" cy="95.5" r="0.8" fill="white" opacity="0.85" />
+    </G>
+  );
+}
+
 function ToolbeltAccessory() {
   return (
     <G>
@@ -103,6 +180,19 @@ function BagAccessory() {
   );
 }
 
+function GoldBangleAccessory() {
+  return (
+    <G>
+      <Ellipse cx="16" cy="37" rx="9" ry="4" fill="none" stroke="#C9A800" strokeWidth="3.5" />
+      <Ellipse cx="16" cy="44" rx="9" ry="4" fill="none" stroke="#D4AA00" strokeWidth="3.5" />
+      <Ellipse cx="16" cy="51" rx="9" ry="4" fill="none" stroke="#C9A800" strokeWidth="3.5" />
+      <Path d="M 11 35.5 Q 14 34 20 35.5" stroke="#F0D060" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+      <Path d="M 11 42.5 Q 14 41 20 42.5" stroke="#F0D060" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+      <Path d="M 11 49.5 Q 14 48 20 49.5" stroke="#F0D060" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+    </G>
+  );
+}
+
 function LanternAccessory() {
   return (
     <G>
@@ -118,41 +208,32 @@ function LanternAccessory() {
   );
 }
 
-// ── Peranakan & Heritage accessories ─────────────────────────────────────────
+// ── Clothing slot items ───────────────────────────────────────────────────────
 
-function JadeAccessory() {
-  // Curved jade bead necklace with gold pendant below chin
+function BatikShirtAccessory() {
+  // Colourful batik shirt visible at chest and lower body
   return (
     <G>
-      <Path d="M 28 84 Q 50 93 72 84" stroke="#1A6B3E" strokeWidth="1.2" fill="none" />
-      <Circle cx="28" cy="84" r="3.5" fill="#3DB870" />
-      <Circle cx="36" cy="87.5" r="3.5" fill="#2EAD60" />
-      <Circle cx="44" cy="90" r="3.5" fill="#3DB870" />
-      <Circle cx="50" cy="91.5" r="4.5" fill="#2EAD60" />
-      <Circle cx="56" cy="90" r="3.5" fill="#3DB870" />
-      <Circle cx="64" cy="87.5" r="3.5" fill="#2EAD60" />
-      <Circle cx="72" cy="84" r="3.5" fill="#3DB870" />
-      {/* gold pendant ring */}
-      <Circle cx="50" cy="91.5" r="5.5" fill="none" stroke="#C9A800" strokeWidth="1.5" />
-      <Circle cx="50" cy="91.5" r="2" fill="#F7E690" />
+      <Path d="M 16 82 Q 50 92 84 82 L 84 100 L 16 100 Z" fill="#1A3A8F" opacity="0.84" />
+      <Path d="M 30 78 L 50 86 L 70 78" stroke="#142D6F" strokeWidth="2.5" fill="none" />
+      <Path d="M 24 88 Q 27 84 30 88 Q 27 91 24 88 Z" fill="#F7A800" opacity="0.9" />
+      <Path d="M 43 90 Q 46 86 49 90 Q 46 93 43 90 Z" fill="#F7A800" opacity="0.9" />
+      <Path d="M 51 90 Q 54 86 57 90 Q 54 93 51 90 Z" fill="#F7A800" opacity="0.9" />
+      <Path d="M 70 88 Q 73 84 76 88 Q 73 91 70 88 Z" fill="#F7A800" opacity="0.9" />
+      <Circle cx="37" cy="89" r="1.5" fill="#F7D26E" opacity="0.85" />
+      <Circle cx="63" cy="89" r="1.5" fill="#F7D26E" opacity="0.85" />
     </G>
   );
 }
 
 function KebayaAccessory() {
-  // Peranakan kebaya — decorative V-neck collar with gold trim and floral embroidery
   return (
     <G>
-      {/* left collar panel */}
       <Path d="M 18 80 L 50 95 L 50 99 L 16 84 Z" fill="#7C3D8F" opacity="0.9" />
-      {/* right collar panel */}
       <Path d="M 82 80 L 50 95 L 50 99 L 84 84 Z" fill="#7C3D8F" opacity="0.9" />
-      {/* gold trim edges */}
       <Path d="M 18 80 L 50 95 L 50 99" stroke="#C9A800" strokeWidth="2" fill="none" />
       <Path d="M 82 80 L 50 95 L 50 99" stroke="#C9A800" strokeWidth="2" fill="none" />
-      {/* shoulder gold band */}
       <Line x1="16" y1="84" x2="84" y2="84" stroke="#C9A800" strokeWidth="1.5" />
-      {/* floral embroidery dots */}
       <Circle cx="33" cy="84" r="2.8" fill="#F7D26E" />
       <Circle cx="33" cy="84" r="1.3" fill="#C9A800" />
       <Circle cx="67" cy="84" r="2.8" fill="#F7D26E" />
@@ -163,80 +244,162 @@ function KebayaAccessory() {
   );
 }
 
-function KerosangAccessory() {
-  // Nonya kerosang — 3 gold diamond brooches connected vertically at chest center
-  return (
-    <G>
-      {/* top diamond */}
-      <Path d="M 50 77 L 55 83 L 50 89 L 45 83 Z" fill="#C9A800" />
-      <Path d="M 50 77 L 55 83 L 50 89 L 45 83 Z" fill="none" stroke="#8B7000" strokeWidth="0.8" />
-      <Circle cx="50" cy="83" r="2.2" fill="#F0E0B0" />
-      <Circle cx="48.5" cy="81.5" r="0.9" fill="white" opacity="0.85" />
-      {/* connecting link */}
-      <Rect x="49" y="89" width="2" height="3" fill="#B8940A" />
-      {/* middle diamond */}
-      <Path d="M 50 92 L 55 97.5 L 50 100 L 45 97.5 Z" fill="#C9A800" />
-      <Path d="M 50 92 L 55 97.5 L 50 100 L 45 97.5 Z" fill="none" stroke="#8B7000" strokeWidth="0.8" />
-      <Circle cx="50" cy="97" r="2" fill="#F0E0B0" />
-      <Circle cx="48.5" cy="95.5" r="0.8" fill="white" opacity="0.85" />
-    </G>
-  );
-}
-
 function SarongAccessory() {
-  // Batik sarong — geometric diamond-patterned band at lower body
   return (
     <G>
-      {/* base sarong band */}
       <Path d="M 11 88 Q 50 97 89 88 L 89 100 L 11 100 Z" fill="#C0380A" />
-      {/* batik diamond motifs */}
       <Path d="M 22 91 L 25.5 88 L 29 91 L 25.5 94 Z" fill="#F7A800" />
       <Path d="M 40 93 L 43.5 90 L 47 93 L 43.5 96 Z" fill="#F7A800" />
       <Path d="M 53 93 L 56.5 90 L 60 93 L 56.5 96 Z" fill="#F7A800" />
       <Path d="M 71 91 L 74.5 88 L 78 91 L 74.5 94 Z" fill="#F7A800" />
-      {/* accent dots */}
       <Circle cx="35" cy="91.5" r="2" fill="#FFD066" opacity="0.9" />
       <Circle cx="65" cy="91.5" r="2" fill="#FFD066" opacity="0.9" />
-      {/* upper border */}
       <Path d="M 11 88 Q 50 97 89 88" stroke="#7A1A00" strokeWidth="1.8" fill="none" />
     </G>
   );
 }
 
-function GoldBangleAccessory() {
-  // Gold bangles stacked on the left ear/side area
+function ChangshanAccessory() {
+  // Traditional cheongsam/changshan with mandarin collar
   return (
     <G>
-      <Ellipse cx="16" cy="37" rx="9" ry="4" fill="none" stroke="#C9A800" strokeWidth="3.5" />
-      <Ellipse cx="16" cy="44" rx="9" ry="4" fill="none" stroke="#D4AA00" strokeWidth="3.5" />
-      <Ellipse cx="16" cy="51" rx="9" ry="4" fill="none" stroke="#C9A800" strokeWidth="3.5" />
-      {/* shine highlights */}
-      <Path d="M 11 35.5 Q 14 34 20 35.5" stroke="#F0D060" strokeWidth="1.3" fill="none" strokeLinecap="round" />
-      <Path d="M 11 42.5 Q 14 41 20 42.5" stroke="#F0D060" strokeWidth="1.3" fill="none" strokeLinecap="round" />
-      <Path d="M 11 49.5 Q 14 48 20 49.5" stroke="#F0D060" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+      <Path d="M 16 82 Q 50 92 84 82 L 84 100 L 16 100 Z" fill="#8B0000" opacity="0.88" />
+      <Path d="M 36 78 L 36 84 Q 50 88 64 84 L 64 78 Q 50 74 36 78 Z" fill="#8B0000" />
+      <Path d="M 36 78 Q 50 74 64 78 L 64 84 Q 50 88 36 84 Z" fill="none" stroke="#C9A800" strokeWidth="1.5" />
+      <Line x1="50" y1="78" x2="50" y2="88" stroke="#C9A800" strokeWidth="1" opacity="0.6" />
+      <Circle cx="50" cy="80" r="2.5" fill="#C9A800" />
+      <Path d="M 47 80 Q 50 76 53 80" stroke="#C9A800" strokeWidth="1.5" fill="none" />
+      <Circle cx="30" cy="88" r="3" fill="#FFD700" opacity="0.78" />
+      <Circle cx="30" cy="88" r="1.5" fill="#C9A800" />
+      <Circle cx="70" cy="88" r="3" fill="#FFD700" opacity="0.78" />
+      <Circle cx="70" cy="88" r="1.5" fill="#C9A800" />
     </G>
   );
 }
 
+// ── Shoes slot items ──────────────────────────────────────────────────────────
+
+function SneakersAccessory() {
+  // Two white sneakers peeking from the bottom of the mochi
+  return (
+    <G>
+      {/* left sneaker */}
+      <Path d="M 18 100 L 18 95 L 44 92 L 44 100 Z" fill="#f2f2f2" />
+      <Path d="M 36 92 Q 44 92 44 96 L 44 100 L 36 100 Z" fill="#E0E0E0" />
+      <Path d="M 16 99 L 45 99 L 45 100 L 16 100 Z" fill="#BDBDBD" />
+      <Line x1="22" y1="95.5" x2="37" y2="94" stroke="#999" strokeWidth="1" />
+      <Line x1="24" y1="94.5" x2="24" y2="96.5" stroke="#999" strokeWidth="1" />
+      <Line x1="30" y1="94" x2="30" y2="96" stroke="#999" strokeWidth="1" />
+      <Line x1="36" y1="94" x2="36" y2="95.5" stroke="#999" strokeWidth="1" />
+      <Path d="M 20 97 Q 30 93.5 41 96" stroke="#E8721A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      {/* right sneaker */}
+      <Path d="M 56 92 L 82 95 L 82 100 L 56 100 Z" fill="#f2f2f2" />
+      <Path d="M 56 92 Q 64 92 64 96 L 64 100 L 56 100 Z" fill="#E0E0E0" />
+      <Path d="M 55 99 L 84 99 L 84 100 L 55 100 Z" fill="#BDBDBD" />
+      <Line x1="63" y1="94" x2="78" y2="95.5" stroke="#999" strokeWidth="1" />
+      <Line x1="64" y1="94" x2="64" y2="96" stroke="#999" strokeWidth="1" />
+      <Line x1="70" y1="94.5" x2="70" y2="96.5" stroke="#999" strokeWidth="1" />
+      <Line x1="76" y1="95" x2="76" y2="97" stroke="#999" strokeWidth="1" />
+      <Path d="M 59 96 Q 69 93.5 80 97" stroke="#E8721A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    </G>
+  );
+}
+
+function SandalsAccessory() {
+  // Traditional leather sandals with ankle strap and gold buckle
+  return (
+    <G>
+      {/* left sandal */}
+      <Ellipse cx="31" cy="97" rx="13" ry="3.5" fill="#8B5E2A" />
+      <Path d="M 24 94 Q 31 90 38 94" stroke="#5C3D1E" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <Line x1="31" y1="90" x2="31" y2="97" stroke="#5C3D1E" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="19" y1="95" x2="42" y2="95" stroke="#6B4C2A" strokeWidth="1.8" strokeLinecap="round" />
+      <Circle cx="19" cy="95" r="2.2" fill="#C9A800" />
+      {/* right sandal */}
+      <Ellipse cx="69" cy="97" rx="13" ry="3.5" fill="#8B5E2A" />
+      <Path d="M 62 94 Q 69 90 76 94" stroke="#5C3D1E" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <Line x1="69" y1="90" x2="69" y2="97" stroke="#5C3D1E" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="57" y1="95" x2="80" y2="95" stroke="#6B4C2A" strokeWidth="1.8" strokeLinecap="round" />
+      <Circle cx="80" cy="95" r="2.2" fill="#C9A800" />
+    </G>
+  );
+}
+
+function SlippersAccessory() {
+  // Nonya beaded kang kang slippers
+  return (
+    <G>
+      {/* left slipper */}
+      <Ellipse cx="31" cy="96.5" rx="13" ry="4.5" fill="#E8608A" />
+      <Path d="M 21 93 Q 31 89.5 41 93" stroke="#C9A800" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <Circle cx="25" cy="91.5" r="2.5" fill="#FFD700" />
+      <Circle cx="31" cy="90" r="2.5" fill="#FFD700" />
+      <Circle cx="37" cy="91.5" r="2.5" fill="#FFD700" />
+      {/* right slipper */}
+      <Ellipse cx="69" cy="96.5" rx="13" ry="4.5" fill="#E8608A" />
+      <Path d="M 59 93 Q 69 89.5 79 93" stroke="#C9A800" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <Circle cx="63" cy="91.5" r="2.5" fill="#FFD700" />
+      <Circle cx="69" cy="90" r="2.5" fill="#FFD700" />
+      <Circle cx="75" cy="91.5" r="2.5" fill="#FFD700" />
+    </G>
+  );
+}
+
+function WedgeHeelsAccessory() {
+  // Peranakan beaded wedge heels
+  return (
+    <G>
+      {/* left wedge */}
+      <Path d="M 18 100 L 22 92 L 44 92 L 44 100 Z" fill="#7C3D8F" />
+      <Path d="M 18 100 L 22 92 L 26 92 L 21 100 Z" fill="#534AB7" />
+      <Path d="M 22 92 Q 33 87 44 92" stroke="#F7D26E" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <Circle cx="27" cy="89" r="2" fill="#F7D26E" />
+      <Circle cx="33" cy="87.5" r="2" fill="#F7D26E" />
+      <Circle cx="39" cy="89" r="2" fill="#F7D26E" />
+      {/* right wedge */}
+      <Path d="M 56 92 L 78 92 L 82 100 L 56 100 Z" fill="#7C3D8F" />
+      <Path d="M 75 92 L 78 92 L 82 100 L 79 100 Z" fill="#534AB7" />
+      <Path d="M 56 92 Q 67 87 78 92" stroke="#F7D26E" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <Circle cx="61" cy="89" r="2" fill="#F7D26E" />
+      <Circle cx="67" cy="87.5" r="2" fill="#F7D26E" />
+      <Circle cx="73" cy="89" r="2" fill="#F7D26E" />
+    </G>
+  );
+}
+
+// ── Component map ─────────────────────────────────────────────────────────────
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ACCESSORY_COMPONENTS: Record<AccessoryId, any> = {
   none:        null,
+  // hats
   bow:         BowAccessory,
   cap:         CapAccessory,
   beret:       BeretAccessory,
   hardhat:     HardhatAccessory,
   toast:       ToastAccessory,
+  // accessories
+  hairpin:     HairpinAccessory,
+  jade:        JadeAccessory,
+  bracelet:    BraceletAccessory,
+  kerosang:    KerosangAccessory,
   toolbelt:    ToolbeltAccessory,
   bag:         BagAccessory,
-  lantern:     LanternAccessory,
-  jade:        JadeAccessory,
-  kebaya:      KebayaAccessory,
-  kerosang:    KerosangAccessory,
-  sarong:      SarongAccessory,
   gold_bangle: GoldBangleAccessory,
+  lantern:     LanternAccessory,
+  // clothing
+  batik_shirt: BatikShirtAccessory,
+  kebaya:      KebayaAccessory,
+  sarong:      SarongAccessory,
+  changshan:   ChangshanAccessory,
+  // shoes
+  sneakers:    SneakersAccessory,
+  sandals:     SandalsAccessory,
+  slippers:    SlippersAccessory,
+  wedge_heels: WedgeHeelsAccessory,
 };
 
-// ── Main component ───────────────────────────────────────────────────────────
+// ── Main component ────────────────────────────────────────────────────────────
 
 interface MochiCharacterProps {
   accessory?: AccessoryId;
@@ -282,7 +445,7 @@ export default function MochiCharacter({ accessory = 'none', size = 160 }: Mochi
         strokeLinecap="round"
       />
 
-      {/* ── Accessory layer (rendered on top) ── */}
+      {/* ── Accessory layer ── */}
       {AccessoryEl && <AccessoryEl />}
 
     </Svg>
