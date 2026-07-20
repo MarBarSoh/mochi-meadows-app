@@ -223,7 +223,10 @@ export default function ProfileScreen() {
                   onPress={() => setActiveSlot('accessories')}
                 />
                 <View style={styles.centerSlot}>
-                  <MochiCharacter accessory={equipped[activeSlot]} size={64} />
+                  <MochiCharacter
+                    accessories={Object.values(equipped).filter(id => id !== 'none')}
+                    size={64}
+                  />
                 </View>
                 <EquipSlot
                   slotId="clothing"

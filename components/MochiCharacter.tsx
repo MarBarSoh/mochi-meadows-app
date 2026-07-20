@@ -402,12 +402,14 @@ const ACCESSORY_COMPONENTS: Record<AccessoryId, any> = {
 // ── Main component ────────────────────────────────────────────────────────────
 
 interface MochiCharacterProps {
-  accessory?: AccessoryId;
+  accessory?: AccessoryId;        // single accessory (backwards compat)
+  accessories?: AccessoryId[];    // multiple accessories rendered as layers
   size?: number;
 }
 
-export default function MochiCharacter({ accessory = 'none', size = 160 }: MochiCharacterProps) {
-  const AccessoryEl = ACCESSORY_COMPONENTS[accessory];
+export default function MochiCharacter({ accessory = 'none', accessories, size = 160 }: MochiCharacterProps) {
+  // Use the array if provided, otherwise fall back to the single prop
+  const layers: AccessoryId[] = accessories ?? (accessory !== 'none' ? [accessory] : []);
 
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100">
@@ -445,8 +447,11 @@ export default function MochiCharacter({ accessory = 'none', size = 160 }: Mochi
         strokeLinecap="round"
       />
 
-      {/* ── Accessory layer ── */}
-      {AccessoryEl && <AccessoryEl />}
+      {/* ── All accessory layers rendered together ── */}
+      {layers.map(id => {
+        const Comp = ACCESSORY_COMPONENTS[id];
+        return Comp ? <Comp key={id} /> : null;
+      })}
 
     </Svg>
   );
