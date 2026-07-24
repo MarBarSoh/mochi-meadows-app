@@ -172,6 +172,11 @@ export default function ProfileScreen() {
           <ProfileChip />
         </View>
 
+        <View style={styles.pageTitle}>
+          <Text style={styles.pageTitleShadow}>MY MOCHI</Text>
+          <Text style={styles.pageTitleText}>MY MOCHI</Text>
+        </View>
+
         <View style={styles.cardPanel}>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.cardContent}>
 
@@ -311,6 +316,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A0A00', alignItems: 'center', justifyContent: 'center',
   },
   avatarIcon: { fontSize: 16 },
+
+  pageTitle: { paddingHorizontal: 20, marginTop: 10, marginBottom: 10, position: 'relative', height: 40 },
+  pageTitleShadow: {
+    position: 'absolute', left: 23, top: 3,
+    fontSize: 32, fontWeight: '900', fontStyle: 'italic', color: '#4A2000',
+  },
+  pageTitleText: {
+    position: 'absolute', left: 20, top: 0,
+    fontSize: 32, fontWeight: '900', fontStyle: 'italic', color: '#FF8C00',
+  },
 
   cardPanel: {
     flex: 1, marginTop: 4,
