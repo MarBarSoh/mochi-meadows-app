@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PLAYER } from '@/constants/playerState';
 import MochiCharacter, { AccessoryId } from '@/components/MochiCharacter';
 
 const meadow = require('../../assets/images/meadow.png');
-const mochiImg = require('../../assets/images/mochi.png');
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -173,16 +172,6 @@ export default function ProfileScreen() {
           <ProfileChip />
         </View>
 
-        <View style={styles.mochiArea}>
-          <Image source={mochiImg} style={styles.mochiImg} resizeMode="contain" />
-          <View style={styles.shadowOval} />
-        </View>
-
-        <View style={styles.nameRow}>
-          <Text style={styles.nameShadow}>NYOM</Text>
-          <Text style={styles.name}>NYOM</Text>
-        </View>
-
         <View style={styles.cardPanel}>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.cardContent}>
 
@@ -323,25 +312,8 @@ const styles = StyleSheet.create({
   },
   avatarIcon: { fontSize: 16 },
 
-  mochiArea: { alignItems: 'center', marginTop: 8 },
-  mochiImg: { width: 150, height: 150 },
-  shadowOval: {
-    width: 110, height: 18, borderRadius: 55,
-    backgroundColor: 'rgba(0,0,0,0.22)', marginTop: -10,
-  },
-
-  nameRow: { alignItems: 'center', height: 46, marginTop: 4 },
-  nameShadow: {
-    position: 'absolute', fontSize: 42, fontWeight: '900',
-    fontStyle: 'italic', color: '#4A2000', top: 3,
-  },
-  name: {
-    position: 'absolute', fontSize: 42, fontWeight: '900',
-    fontStyle: 'italic', color: '#FF8C00', top: 0,
-  },
-
   cardPanel: {
-    flex: 1, marginTop: 12,
+    flex: 1, marginTop: 4,
     backgroundColor: 'rgba(253,246,236,0.97)',
     borderTopLeftRadius: 28, borderTopRightRadius: 28,
     overflow: 'hidden',
