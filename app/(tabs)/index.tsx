@@ -63,8 +63,8 @@ export default function ExploreScreen() {
 
         {/* Orange bold italic title */}
         <View style={styles.titleArea}>
-          <Text style={styles.titleShadow}>SEND YOUR{'\n'}MOCCHI ON AN{'\n'}ADVENTURE!</Text>
-          <Text style={styles.title}>SEND YOUR{'\n'}MOCCHI ON AN{'\n'}ADVENTURE!</Text>
+          <Text style={styles.titleShadow}>SEND YOUR{'\n'}MOCHI ON AN{'\n'}ADVENTURE!</Text>
+          <Text style={styles.title}>SEND YOUR{'\n'}MOCHI ON AN{'\n'}ADVENTURE!</Text>
         </View>
 
         {/* 4 big activity buttons */}
