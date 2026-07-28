@@ -16,9 +16,9 @@ function useSpringPress(toScale = 0.96) {
 }
 
 const ACTIVITIES = [
-  { id: 'time', label: 'TIME TRAVEL' },
+  { id: 'time', label: 'TIME TRAVELLING' },
   { id: 'food', label: 'BRING BACK THE FOOD' },
-  { id: 'art', label: 'ART RECREATION' },
+  { id: 'art', label: 'RECREATE THE ART' },
   { id: 'maker', label: 'MEET THE MAKER' },
 ];
 
