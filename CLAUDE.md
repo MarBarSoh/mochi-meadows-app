@@ -25,7 +25,7 @@ teal:   dark #04342C | mid #0F6E56 | bg #EDFFF6 | light #88DDBB
 
 ## The 4 heritage activities (each has its own color theme)
 1. **Time Travelling** (blue) — Match archival photos of Jalan Besar landmarks to real-life spots. Scan QR at site.
-2. **Bring Back the Food** (amber) — Visit heritage hawker stalls, scan QR after purchase. Complete groups of 3 for CDC vouchers.
+2. **Bring Back the Food** (amber) — Visit heritage hawker stalls, scan QR after purchase. Complete groups of 3 for Jalan Besar Vouchers.
 3. **Recreate the Art** (purple) — Find murals, photograph Mochi at them via AR camera, submit own artwork to community gallery.
 4. **Meet the Maker** (teal) — Visit traditional trade shops, complete a discovery challenge, scan shop QR.
 
@@ -61,7 +61,7 @@ Image assets are PNGs in the `/assets` folder.
 
 ## Rewards system
 - Mochi accessories (e.g. Kapitan Cap, kaya toast hat, artist beret, rattan bag, toolbelt)
-- CDC Vouchers on completing food trail groups
+- Jalan Besar Vouchers on completing food trail groups
 - Community gallery features for top-rated art submissions
 - Meadow progression (levels, biomes unlock)
 
@@ -126,7 +126,7 @@ All four activities are defined in `ACTIVITY_DATA` as a keyed object (`food`, `t
 ## Survey findings that drive design decisions
 (From 113-response validation survey, July 2026)
 - **Bring Back the Food** is the hero activity — always give it priority placement
-- **CDC Vouchers** are the #1 motivator — keep them visible and prominent everywhere
+- **Jalan Besar Vouchers** are the #1 motivator — keep them visible and prominent everywhere
 - **Recreate the Art** is least popular — do not give it hero status or a prominent map pin
 - Most respondents do **not** visit JB regularly — onboarding must frame the app as a reason to visit for the first time
 - Respondents want it **simple and not grindy** — keep trail lengths short (3 stalls is correct scope)
