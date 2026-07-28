@@ -1,11 +1,11 @@
 export const PLAYER = {
   name: 'Matthew',
   level: 4,
-  xp: 2600,
-  nextLevelXp: 3500,
-  currentLevelXp: 2200,
-  xpProgress: 400 / 1300, // (2600-2200) / (3500-2200)
-  xpToNext: 900,
+  xp: 420,
+  nextLevelXp: 500,
+  currentLevelXp: 350,
+  xpProgress: 70 / 150, // (420-350) / (500-350)
+  xpToNext: 80,
 
   stallsDone: 1,
   totalStalls: 3,

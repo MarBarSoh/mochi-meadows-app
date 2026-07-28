@@ -119,7 +119,7 @@ const INITIAL_LEVELS: LevelReward[] = [
     level: 2,
     title: 'Neighbourhood Scout',
     accessories: [{ emoji: '🧢', name: 'Kapitan Cap' }],
-    xpRequired: 500,
+    xpRequired: 100,
     claimed: true,
     claimable: false,
   },
@@ -127,7 +127,7 @@ const INITIAL_LEVELS: LevelReward[] = [
     level: 3,
     title: 'Street Artist',
     accessories: [{ emoji: '🎓', name: 'Artist Beret' }],
-    xpRequired: 1200,
+    xpRequired: 225,
     claimed: true,
     claimable: false,
   },
@@ -135,7 +135,7 @@ const INITIAL_LEVELS: LevelReward[] = [
     level: 4,
     title: 'Skilled Maker',
     accessories: [{ emoji: '⛑️', name: 'Hardhat' }],
-    xpRequired: 2200,
+    xpRequired: 350,
     claimed: false,
     claimable: true,
   },
@@ -146,7 +146,7 @@ const INITIAL_LEVELS: LevelReward[] = [
       { emoji: '🍞', name: 'Kaya Toast Hat' },
       { emoji: '💚', name: 'Jade Necklace' },
     ],
-    xpRequired: 3500,
+    xpRequired: 500,
     claimed: false,
     claimable: false,
   },
@@ -158,7 +158,7 @@ const INITIAL_LEVELS: LevelReward[] = [
       { emoji: '📿', name: 'Nonya Brooch' },
       { emoji: '🔧', name: 'Toolbelt' },
     ],
-    xpRequired: 5000,
+    xpRequired: 650,
     claimed: false,
     claimable: false,
   },
@@ -169,7 +169,7 @@ const INITIAL_LEVELS: LevelReward[] = [
       { emoji: '👜', name: 'Rattan Bag' },
       { emoji: '🧵', name: 'Batik Sarong' },
     ],
-    xpRequired: 7000,
+    xpRequired: 750,
     claimed: false,
     claimable: false,
   },
@@ -180,7 +180,29 @@ const INITIAL_LEVELS: LevelReward[] = [
       { emoji: '💛', name: 'Gold Bangles' },
       { emoji: '🏮', name: 'Heritage Lantern' },
     ],
-    xpRequired: 10000,
+    xpRequired: 1000,
+    claimed: false,
+    claimable: false,
+  },
+  {
+    level: 9,
+    title: 'Heritage Champion',
+    accessories: [
+      { emoji: '🎭', name: 'Wayang Headdress' },
+      { emoji: '📜', name: 'Heritage Scroll' },
+    ],
+    xpRequired: 1250,
+    claimed: false,
+    claimable: false,
+  },
+  {
+    level: 10,
+    title: 'Jalan Besar Legend',
+    accessories: [
+      { emoji: '🏆', name: 'Legend Crown' },
+      { emoji: '🌟', name: 'Golden Aura' },
+    ],
+    xpRequired: 1500,
     claimed: false,
     claimable: false,
   },
@@ -218,7 +240,7 @@ const HOW_TO_USE = [
   'One voucher per visit. Cannot be combined with other offers.',
 ];
 
-const INITIAL_VOUCHERS: Voucher[] = Array.from({ length: 8 }, (_, i) => {
+const INITIAL_VOUCHERS: Voucher[] = Array.from({ length: 10 }, (_, i) => {
   const level = i + 1;
   const isSpecial = level % 5 === 0;
   const amount = isSpecial ? 20 : 10;

@@ -83,6 +83,8 @@ const LEVEL_TITLE: Record<number, string> = {
   6: 'Master Craftsman',
   7: 'Rattan Weaver',
   8: 'Heritage Master',
+  9: 'Heritage Champion',
+  10: 'Jalan Besar Legend',
 };
 
 function EquipSlot({
