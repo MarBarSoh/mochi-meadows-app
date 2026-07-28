@@ -211,108 +211,33 @@ type Voucher = {
   qrCode: string;
 };
 
-const INITIAL_VOUCHERS: Voucher[] = [
-  {
-    id: 'jb_lv2',
-    title: '$10 Jalan Besar Voucher',
-    shop: 'Any participating Jalan Besar shop',
-    discount: '$10 off your purchase',
-    icon: '🎟️',
-    color: '#F7A800',
-    darkColor: '#8B5800',
-    unlockLevel: 2,
-    claimed: true,
-    claimable: false,
-    expiry: '31 Dec 2026',
-    howToUse: [
-      'Show this QR code to the stall or shop owner before payment.',
-      'The owner will scan the QR code using the Mochi Meadows app.',
-      'Valid at any participating Jalan Besar shop or hawker stall.',
-      'One voucher per visit. Cannot be combined with other offers.',
-    ],
-    qrCode: 'MOCHI-VC-JB10-2026-LV2',
-  },
-  {
-    id: 'jb_lv4',
-    title: '$15 Jalan Besar Voucher',
-    shop: 'Any participating Jalan Besar shop',
-    discount: '$15 off your purchase',
-    icon: '🎟️',
-    color: '#E8721A',
-    darkColor: '#7A3000',
-    unlockLevel: 4,
-    claimed: false,
-    claimable: true,
-    expiry: '31 Dec 2026',
-    howToUse: [
-      'Show this QR code to the stall or shop owner before payment.',
-      'The owner will scan the QR code using the Mochi Meadows app.',
-      'Valid at any participating Jalan Besar shop or hawker stall.',
-      'One voucher per visit. Cannot be combined with other offers.',
-    ],
-    qrCode: 'MOCHI-VC-JB15-2026-LV4',
-  },
-  {
-    id: 'jb_lv5',
-    title: '$20 Jalan Besar Voucher',
-    shop: 'Any participating Jalan Besar shop',
-    discount: '$20 off your purchase',
-    icon: '🎟️',
-    color: '#0F6E56',
-    darkColor: '#04342C',
-    unlockLevel: 5,
-    claimed: false,
-    claimable: false,
-    expiry: '31 Dec 2026',
-    howToUse: [
-      'Show this QR code to the stall or shop owner before payment.',
-      'The owner will scan the QR code using the Mochi Meadows app.',
-      'Valid at any participating Jalan Besar shop or hawker stall.',
-      'One voucher per visit. Cannot be combined with other offers.',
-    ],
-    qrCode: 'MOCHI-VC-JB20-2026-LV5',
-  },
-  {
-    id: 'jb_lv6',
-    title: '$30 Jalan Besar Voucher',
-    shop: 'Any participating Jalan Besar shop',
-    discount: '$30 off your purchase',
-    icon: '🎟️',
-    color: '#534AB7',
-    darkColor: '#26215C',
-    unlockLevel: 6,
-    claimed: false,
-    claimable: false,
-    expiry: '31 Dec 2026',
-    howToUse: [
-      'Show this QR code to the stall or shop owner before payment.',
-      'The owner will scan the QR code using the Mochi Meadows app.',
-      'Valid at any participating Jalan Besar shop or hawker stall.',
-      'One voucher per visit. Cannot be combined with other offers.',
-    ],
-    qrCode: 'MOCHI-VC-JB30-2026-LV6',
-  },
-  {
-    id: 'jb_lv8',
-    title: '$50 Jalan Besar Voucher',
-    shop: 'Any participating Jalan Besar shop',
-    discount: '$50 off your purchase',
-    icon: '🎟️',
-    color: '#185FA5',
-    darkColor: '#0C447C',
-    unlockLevel: 8,
-    claimed: false,
-    claimable: false,
-    expiry: '31 Dec 2026',
-    howToUse: [
-      'Show this QR code to the stall or shop owner before payment.',
-      'The owner will scan the QR code using the Mochi Meadows app.',
-      'Valid at any participating Jalan Besar shop or hawker stall.',
-      'One voucher per visit. Cannot be combined with other offers.',
-    ],
-    qrCode: 'MOCHI-VC-JB50-2026-LV8',
-  },
+const HOW_TO_USE = [
+  'Show this QR code to the stall or shop owner before payment.',
+  'The owner will scan the QR code using the Mochi Meadows app.',
+  'Valid at any participating Jalan Besar shop or hawker stall.',
+  'One voucher per visit. Cannot be combined with other offers.',
 ];
+
+const INITIAL_VOUCHERS: Voucher[] = Array.from({ length: 8 }, (_, i) => {
+  const level = i + 1;
+  const isSpecial = level % 5 === 0;
+  const amount = isSpecial ? 20 : 10;
+  return {
+    id: `jb_lv${level}`,
+    title: `$${amount} Jalan Besar Voucher`,
+    shop: 'Any participating Jalan Besar shop',
+    discount: `$${amount} off your purchase`,
+    icon: isSpecial ? '⭐' : '🎟️',
+    color: isSpecial ? '#185FA5' : '#F7A800',
+    darkColor: isSpecial ? '#0C447C' : '#8B5800',
+    unlockLevel: level,
+    claimed: level < PLAYER.level,
+    claimable: level === PLAYER.level,
+    expiry: '31 Dec 2026',
+    howToUse: HOW_TO_USE,
+    qrCode: `MOCHI-VC-JB${amount}-2026-LV${level}`,
+  };
+});
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
