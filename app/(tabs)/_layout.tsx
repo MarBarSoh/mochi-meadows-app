@@ -1,11 +1,8 @@
 import { Tabs } from 'expo-router';
-import { Image, Platform, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import MochiCharacter from '@/components/MochiCharacter';
 
 const tabGames = require('../../assets/images/tab-games.png');
-const tabShield = require('../../assets/images/tab-shield.png');
-const tabHome = require('../../assets/images/tab-home.png');
-const tabRewards = require('../../assets/images/tab-rewards.png');
-const tabMessages = require('../../assets/images/tab-messages.png');
 
 function TabIconImg({ src, focused, size = 32 }: { src: any; focused: boolean; size?: number }) {
   return (
@@ -17,10 +14,16 @@ function TabIconImg({ src, focused, size = 32 }: { src: any; focused: boolean; s
   );
 }
 
+function TabIconEmoji({ emoji, focused, size = 26 }: { emoji: string; focused: boolean; size?: number }) {
+  return (
+    <Text style={{ fontSize: size, opacity: focused ? 1 : 0.45 }}>{emoji}</Text>
+  );
+}
+
 function CenterTabIcon({ focused }: { focused: boolean }) {
   return (
     <View style={[styles.centerIconWrapper, focused && styles.centerIconActive]}>
-      <Image source={tabHome} style={{ width: 38, height: 38 }} resizeMode="contain" />
+      <MochiCharacter size={38} />
     </View>
   );
 }
@@ -43,7 +46,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="achievements"
         options={{
-          tabBarIcon: ({ focused }) => <TabIconImg src={tabShield} focused={focused} size={28} />,
+          tabBarIcon: ({ focused }) => <TabIconEmoji emoji="📖" focused={focused} />,
         }}
       />
       <Tabs.Screen
@@ -56,13 +59,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="rewards"
         options={{
-          tabBarIcon: ({ focused }) => <TabIconImg src={tabRewards} focused={focused} size={30} />,
+          tabBarIcon: ({ focused }) => <TabIconEmoji emoji="🏆" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="about"
         options={{
-          tabBarIcon: ({ focused }) => <TabIconImg src={tabMessages} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIconEmoji emoji="👥" focused={focused} />,
         }}
       />
     </Tabs>
